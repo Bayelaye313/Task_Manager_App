@@ -1,14 +1,15 @@
-const express = require('express')
+const express = require('express');
+const dotenv = require('dotenv').config();
+const colors = require('colors')
+const connectDb = require('./bd/bd');
+const { handleError } = require('./src/middleware/handleError');
+const port = process.env.PORT || 5000
+connectDb()
+const App = express();
 
-const app = express();
-const PORT = 3000
+App.use(express.json())
+App.use(express.urlencoded({extended:false}))
+App.use('/api/goals', require('./src/routes/goalsRoutes'))
+App.use(handleError)
 
-app.get('/', (req, res) =>{
-
-        res.send('hello you')
-})
-
-
-app.listen(PORT, ()=>{
-    console.log(`Serveur démarré sur http://localhost:${PORT}`)
-})
+App.listen(port, ()=>console.log(`server started on port ${port}`))
