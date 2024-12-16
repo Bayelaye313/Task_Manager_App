@@ -1,4 +1,4 @@
-const { stack } = require("../routes/goalsRoutes");
+const { stack } = require("../routes/userRoutes");
 
 const handleError = (err,req, res, next)=>{
     const statusCode = res.statusCode? res.statusCode: 500
