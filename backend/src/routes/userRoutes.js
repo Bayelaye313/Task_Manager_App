@@ -1,15 +1,15 @@
 const express = require("express");
 
 const {
-  getGoal,
-  setUser,
-  updateGoal,
-  deleteGoal,
+  getUser,
+  registerUser,
+  updateUser,
+  deleteUser,
 } = require("../controllers/goalsControllers");
 
 const router = express.Router();
 
-router.route("/").get(getGoal).post(setUser);
-router.route("/:id").put(updateGoal).delete(deleteGoal);
+router.route("/").get(getUser).post(registerUser);
+router.route("/:id").put(updateUser).delete(deleteUser);
 
 module.exports = router;
