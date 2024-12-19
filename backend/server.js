@@ -4,7 +4,7 @@ const colors = require("colors");
 const cors = require("cors");
 const connectDb = require("./src/bd/bd");
 const { handleError } = require("./src/middleware/handleError");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 const App = express();
 
 App.use(express.json());

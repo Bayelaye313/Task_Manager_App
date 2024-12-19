@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
 const User = require("../models/userModels");
+const { default: generateTokens } = require("../helpers/generateTokens");
 
 const getUser = asyncHandler(async (req, res) => {
   const users = await User.find();
@@ -8,7 +9,7 @@ const getUser = asyncHandler(async (req, res) => {
 });
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, photo, bio, role, isVerified } = req.body;
-
+  // Vérification des champs requis
   if (!name || !email || !password) {
     res.status(400);
     throw new Error(
@@ -21,9 +22,10 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("Password length must be at least 6 characters");
   }
   //check if user already exist
-  const userExisted = User.findOne({ email });
+  const userExisted = await User.findOne({ email });
   if (userExisted) {
-    return res.status(400).json("user already exist");
+    res.status(400);
+    throw new Error("user already exist");
   }
   const user = await User.create({
     name,
@@ -34,23 +36,23 @@ const registerUser = asyncHandler(async (req, res) => {
     role,
     isVerified,
   });
+  //user tokn
+  const token = generateTokens(user._id);
+  console.log(token);
   if (user) {
-    const { name, email, password, photo, bio, role, isVerified } = user;
     res.status(201).json({
-      name,
-      email,
-      password,
-      photo,
-      bio,
-      role,
-      isVerified,
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      photo: user.photo,
+      bio: user.bio,
+      role: user.role,
+      isVerified: user.isVerified,
     });
   } else {
     res.status(400);
     throw new Error("invalid user data");
   }
-
-  res.status(200).json(user);
 });
 
 const updateUser = asyncHandler(async (req, res) => {
