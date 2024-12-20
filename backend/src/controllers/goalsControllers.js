@@ -72,6 +72,53 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+const loginUser = asyncHandler(async (req, res) => {
+  // check log infos
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("email and password are required");
+  }
+  // if user exist
+  const userExist = await User.findOne({ email });
+  if (!userExist) {
+    res.status(400).json({ message: "user not exist please sign in" });
+  }
+  // check password matched
+  const isMatched = await bcrypt.compare(password, userExist.password);
+  if (!isMatched) {
+    res.status(401);
+    throw new Error("Invalid email or password");
+  }
+  const token = generateTokens(userExist._id);
+  if (userExist && isMatched) {
+    res.status(200).json({
+      message: "user login successfully",
+      user: {
+        id: userExist._id,
+        name: userExist.name,
+        email: userExist.email,
+        photo: userExist.photo,
+        bio: userExist.bio,
+        role: userExist.role,
+        isVerified: userExist.isVerified,
+        token,
+      },
+    });
+    // Ajout du cookie sécurisé
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      path: "/",
+    });
+  } else {
+    res.status(400).json({ message: "user login failed" });
+  }
+});
+
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.params.id);
 
@@ -106,6 +153,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 module.exports = {
   getUser,
   registerUser,
+  loginUser,
   updateUser,
   deleteUser,
 };
