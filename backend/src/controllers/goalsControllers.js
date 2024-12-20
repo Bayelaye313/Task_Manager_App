@@ -1,7 +1,8 @@
 const asyncHandler = require("express-async-handler");
+const bcrypt = require("bcrypt");
 
 const User = require("../models/userModels");
-const { default: generateTokens } = require("../helpers/generateTokens");
+const generateTokens = require("../helpers/generateTokens");
 
 const getUser = asyncHandler(async (req, res) => {
   const users = await User.find();
@@ -21,33 +22,49 @@ const registerUser = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Password length must be at least 6 characters");
   }
+
   //check if user already exist
   const userExisted = await User.findOne({ email });
   if (userExisted) {
     res.status(400);
     throw new Error("user already exist");
   }
+
+  // Cryptage du mot de passe
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   const user = await User.create({
     name,
     email,
-    password,
+    password: hashedPassword,
     photo,
     bio,
     role,
     isVerified,
   });
-  //user tokn
-  const token = generateTokens(user._id);
-  console.log(token);
   if (user) {
+    const token = generateTokens(user._id);
+
+    // Ajout du cookie sécurisé
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      path: "/",
+    });
     res.status(201).json({
-      id: user._id,
-      name: user.name,
-      email: user.email,
-      photo: user.photo,
-      bio: user.bio,
-      role: user.role,
-      isVerified: user.isVerified,
+      message: "User registered successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        photo: user.photo,
+        bio: user.bio,
+        role: user.role,
+        isVerified: user.isVerified,
+        token,
+      },
     });
   } else {
     res.status(400);
