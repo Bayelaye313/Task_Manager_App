@@ -1,8 +1,10 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/userModels");
 const generateTokens = require("../helpers/generateTokens");
+const { JsonWebTokenError } = require("jsonwebtoken");
 
 const getUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
@@ -166,6 +168,22 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+const loginStatus = asyncHandler(async (req, res) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    res.status(404).json({ message: "not authorized please login" });
+  }
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+  if (decoded) {
+    res.status(200).json(true);
+  } else {
+    res.status(401).json(false);
+  }
+});
+
 // const deleteUser = asyncHandler(async (req, res) => {
 //   const user = await User.findById(req.params.id);
 //   if (!user) {
@@ -184,4 +202,5 @@ module.exports = {
   loginUser,
   logoutUser,
   updateUser,
+  loginStatus,
 };
