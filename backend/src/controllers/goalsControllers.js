@@ -139,22 +139,31 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.user._id);
 
   if (!user) {
     res.status(400);
-    throw new Error("Goal with this ID not found");
+    throw new Error("user with this ID not found");
+  } else {
+    const { name, bio, photo } = req.body;
+    user.name = name || user.name;
+    user.bio = bio || user.bio;
+    user.photo = photo || user.photo;
+
+    const updatedUser = await user.save();
+    res.status(200).json({
+      message: "User updated successfully",
+      updatedUser: {
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        photo: updatedUser.photo,
+        bio: updatedUser.bio,
+        role: updatedUser.role,
+        isVerified: updatedUser.isVerified,
+      },
+    });
   }
-
-  console.log("Request Body:", req.body); // Log request body to see what is coming in
-
-  const updatedGoal = await User.findByIdAndUpdate(
-    req.params.id,
-    { text: req.body.text },
-    { new: true, runValidators: true }
-  );
-
-  res.status(200).json(updatedGoal);
 });
 
 const deleteUser = asyncHandler(async (req, res) => {
