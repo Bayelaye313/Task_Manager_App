@@ -5,8 +5,13 @@ const User = require("../models/userModels");
 const generateTokens = require("../helpers/generateTokens");
 
 const getUser = asyncHandler(async (req, res) => {
-  const users = await User.find();
-  res.status(200).json(users);
+  const user = await User.findById(req.user._id).select("-password");
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
 });
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, photo, bio, role, isVerified } = req.body;
@@ -31,12 +36,12 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   // Cryptage du mot de passe
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // const hashedPassword = await bcrypt.hash(password, 10);
 
   const user = await User.create({
     name,
     email,
-    password: hashedPassword,
+    password,
     photo,
     bio,
     role,
@@ -49,7 +54,7 @@ const registerUser = asyncHandler(async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: true,
+      sameSite: "strict",
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: "/",
     });
@@ -72,51 +77,65 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
+// user login
 const loginUser = asyncHandler(async (req, res) => {
-  // check log infos
+  // get email and password from req.body
   const { email, password } = req.body;
 
+  // validation
   if (!email || !password) {
-    res.status(400);
-    throw new Error("email and password are required");
+    // 400 Bad Request
+    return res.status(400).json({ message: "All fields are required" });
   }
-  // if user exist
-  const userExist = await User.findOne({ email });
-  if (!userExist) {
-    res.status(400).json({ message: "user not exist please sign in" });
+
+  // check if user exists
+  const userExists = await User.findOne({ email });
+
+  if (!userExists) {
+    return res.status(404).json({ message: "User not found, sign up!" });
   }
-  // check password matched
-  const isMatched = await bcrypt.compare(password, userExist.password);
-  if (!isMatched) {
-    res.status(401);
-    throw new Error("Invalid email or password");
+
+  // check id the password match the hashed password in the database
+  const isMatch = await bcrypt.compare(password, userExists.password);
+
+  if (!isMatch) {
+    // 400 Bad Request
+    return res.status(400).json({ message: "Invalid credentials" });
   }
-  const token = generateTokens(userExist._id);
-  if (userExist && isMatched) {
-    res.status(200).json({
-      message: "user login successfully",
-      user: {
-        id: userExist._id,
-        name: userExist.name,
-        email: userExist.email,
-        photo: userExist.photo,
-        bio: userExist.bio,
-        role: userExist.role,
-        isVerified: userExist.isVerified,
-        token,
-      },
-    });
-    // Ajout du cookie sécurisé
+
+  // generate token with user id
+  const token = generateTokens(userExists._id);
+
+  if (userExists && isMatch) {
+    const { _id, name, email, role, photo, bio, isVerified } = userExists;
+
+    // set the token in the cookie
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
       path: "/",
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      sameSite: "none", // cross-site access --> allow all third-party cookies
+      secure: true,
+    });
+
+    // send back the user and token in the response to the client
+    res.status(200).json({
+      _id,
+      name,
+      email,
+      role,
+      photo,
+      bio,
+      isVerified,
+      token,
     });
   } else {
-    res.status(400).json({ message: "user login failed" });
+    res.status(400).json({ message: "Invalid email or password" });
   }
+});
+const logoutUser = asyncHandler(async (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "user logged out" });
 });
 
 const updateUser = asyncHandler(async (req, res) => {
@@ -154,6 +173,7 @@ module.exports = {
   getUser,
   registerUser,
   loginUser,
+  logoutUser,
   updateUser,
   deleteUser,
 };
