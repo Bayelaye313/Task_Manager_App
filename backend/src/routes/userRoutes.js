@@ -5,6 +5,7 @@ const {
   loginUser,
   updateUser,
   logoutUser,
+  loginStatus,
 } = require("../controllers/authControllers");
 const {
   protect,
@@ -24,5 +25,7 @@ router.route("/user").patch(protect, updateUser);
 //admin routes
 router.route("/admin/users/:id").delete(protect, adminMiddleware, deleteUser);
 router.route("/admin/users").get(protect, creatorMiddleware, getAllUsers);
+
+router.route("/login-status").get(protect, loginStatus);
 
 module.exports = router;
