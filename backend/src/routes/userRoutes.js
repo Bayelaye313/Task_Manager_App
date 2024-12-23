@@ -6,8 +6,12 @@ const {
   updateUser,
   logoutUser,
 } = require("../controllers/authControllers");
-const { protect, adminMiddleware } = require("../middleware/authMiddleware");
-const deleteUser = require("../controllers/adminControllers");
+const {
+  protect,
+  adminMiddleware,
+  creatorMiddleware,
+} = require("../middleware/authMiddleware");
+const { deleteUser, getAllUsers } = require("../controllers/adminControllers");
 
 const router = express.Router();
 
@@ -19,5 +23,6 @@ router.route("/user").patch(protect, updateUser);
 
 //admin routes
 router.route("/admin/users/:id").delete(protect, adminMiddleware, deleteUser);
+router.route("/admin/users").get(protect, creatorMiddleware, getAllUsers);
 
 module.exports = router;
