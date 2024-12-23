@@ -44,5 +44,14 @@ const adminMiddleware = asyncHandler(async (req, res, next) => {
   }
   res.status(403).json({ message: "only admins can access to this feature" });
 });
+const creatorMiddleware = asyncHandler(async (req, res, next) => {
+  if (req.user && (req.user.role === "creator" || req.user.role === "admin")) {
+    return next();
+  }
 
-module.exports = { protect, adminMiddleware };
+  res.status(403).json({
+    message: "Only admins and creators can access this feature",
+  });
+});
+
+module.exports = { protect, adminMiddleware, creatorMiddleware };

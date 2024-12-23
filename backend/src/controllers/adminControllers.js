@@ -19,4 +19,17 @@ const deleteUser = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = deleteUser;
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await userModels.find();
+
+  if (!users || users.length === 0) {
+    res.status(404);
+    throw new Error("No users found");
+  }
+
+  res.status(200).json({
+    message: "Users retrieved successfully",
+    users,
+  });
+});
+module.exports = { deleteUser, getAllUsers };
