@@ -166,17 +166,17 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
-const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-  if (!user) {
-    res.status(400);
-    throw new Error("can not find error");
-  }
-  const deletedUser = await User.findByIdAndDelete(req.params.id, {
-    new: true,
-  });
-  res.status(200).json(deletedUser);
-});
+// const deleteUser = asyncHandler(async (req, res) => {
+//   const user = await User.findById(req.params.id);
+//   if (!user) {
+//     res.status(400);
+//     throw new Error("can not find error");
+//   }
+//   const deletedUser = await User.findByIdAndDelete(req.params.id, {
+//     new: true,
+//   });
+//   res.status(200).json(deletedUser);
+// });
 
 module.exports = {
   getUser,
@@ -184,5 +184,4 @@ module.exports = {
   loginUser,
   logoutUser,
   updateUser,
-  deleteUser,
 };

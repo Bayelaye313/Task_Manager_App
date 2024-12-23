@@ -4,10 +4,10 @@ const {
   registerUser,
   loginUser,
   updateUser,
-  deleteUser,
   logoutUser,
-} = require("../controllers/goalsControllers");
-const protect = require("../middleware/authMiddleware");
+} = require("../controllers/authControllers");
+const { protect, adminMiddleware } = require("../middleware/authMiddleware");
+const deleteUser = require("../controllers/adminControllers");
 
 const router = express.Router();
 
@@ -17,6 +17,7 @@ router.route("/logout").post(logoutUser);
 router.route("/user").get(protect, getUser);
 router.route("/user").patch(protect, updateUser);
 
-router.route("/:id").put(updateUser).delete(deleteUser);
+//admin routes
+router.route("/admin/users/:id").delete(protect, adminMiddleware, deleteUser);
 
 module.exports = router;

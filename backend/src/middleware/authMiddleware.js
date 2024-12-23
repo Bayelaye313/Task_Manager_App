@@ -23,7 +23,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
     // check if user exists
     if (!user) {
-      console.log("user not found");
+      //console.log("user not found");
       res.status(404).json({ message: "User not found!" });
     }
 
@@ -37,4 +37,12 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = protect;
+const adminMiddleware = asyncHandler(async (req, res, next) => {
+  if (req.user && req.user.role == "admin") {
+    next();
+    return;
+  }
+  res.status(403).json({ message: "only admins can access to this feature" });
+});
+
+module.exports = { protect, adminMiddleware };
