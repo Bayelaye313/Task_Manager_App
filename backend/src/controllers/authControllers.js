@@ -1,10 +1,14 @@
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const User = require("../models/userModels");
 const generateTokens = require("../helpers/generateTokens");
 const { JsonWebTokenError } = require("jsonwebtoken");
+const Token = require("../models/tokenModels");
+const sendEmail = require("../helpers/sendEmail");
+const hashToken = require("../helpers/hashToken");
 
 const getUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
@@ -15,6 +19,8 @@ const getUser = asyncHandler(async (req, res) => {
     throw new Error("User not found");
   }
 });
+
+//register User
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password, photo, bio, role, isVerified } = req.body;
   // Vérification des champs requis
@@ -135,11 +141,14 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(400).json({ message: "Invalid email or password" });
   }
 });
+
+//logout user
 const logoutUser = asyncHandler(async (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ message: "user logged out" });
 });
 
+//update user
 const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
@@ -168,6 +177,7 @@ const updateUser = asyncHandler(async (req, res) => {
   }
 });
 
+//user login-status
 const loginStatus = asyncHandler(async (req, res) => {
   const token = req.cookies.token;
 
@@ -181,6 +191,62 @@ const loginStatus = asyncHandler(async (req, res) => {
     res.status(200).json(true);
   } else {
     res.status(401).json(false);
+  }
+});
+
+//user email verification
+const verifyEmail = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  // if user exists
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  // check if user is already verified
+  if (user.isVerified) {
+    return res.status(400).json({ message: "User is already verified" });
+  }
+
+  let token = await Token.findOne({ userId: user._id });
+
+  // if token exists --> delete the token
+  if (token) {
+    await token.deleteOne();
+  }
+
+  // create a verification token using the user id --->
+  const verificationToken = crypto.randomBytes(64).toString("hex") + user._id;
+
+  // hast the verification token
+  const hashedToken = hashToken(verificationToken);
+
+  await new Token({
+    userId: user._id,
+    verificationToken: hashedToken,
+    createdAt: Date.now(),
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+  }).save();
+
+  // verification link
+  const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+
+  // send email
+  const subject = "Email Verification - AuthKit";
+  const send_to = user.email;
+  const reply_to = "noreply@gmail.com";
+  const template = "emailVerification";
+  const send_from = process.env.USER_EMAIL;
+  const name = user.name;
+  const url = verificationLink;
+
+  try {
+    // order matters ---> subject, send_to, send_from, reply_to, template, name, url
+    await sendEmail(subject, send_to, send_from, reply_to, template, name, url);
+    return res.json({ message: "Email sent" });
+  } catch (error) {
+    console.log("Error sending email: ", error);
+    return res.status(500).json({ message: "Email could not be sent" });
   }
 });
 
@@ -203,4 +269,5 @@ module.exports = {
   logoutUser,
   updateUser,
   loginStatus,
+  verifyEmail,
 };
