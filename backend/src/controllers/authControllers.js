@@ -250,6 +250,42 @@ const verifyEmail = asyncHandler(async (req, res) => {
   }
 });
 
+// verify user
+const verifyUser = asyncHandler(async (req, res) => {
+  const { verificationToken } = req.params;
+
+  if (!verificationToken) {
+    return res.status(400).json({ message: "Invalid verification token" });
+  }
+  // hash the verification token --> because it was hashed before saving
+  const hashedToken = hashToken(verificationToken);
+
+  // find user with the verification token
+  const userToken = await Token.findOne({
+    verificationToken: hashedToken,
+    // check if the token has not expired
+    expiresAt: { $gt: Date.now() },
+  });
+
+  if (!userToken) {
+    return res
+      .status(400)
+      .json({ message: "Invalid or expired verification token" });
+  }
+
+  //find user with the user id in the token
+  const user = await User.findById(userToken.userId);
+
+  if (user.isVerified) {
+    // 400 Bad Request
+    return res.status(400).json({ message: "User is already verified" });
+  }
+
+  // update user to verified
+  user.isVerified = true;
+  await user.save();
+  res.status(200).json({ message: "User verified" });
+});
 // const deleteUser = asyncHandler(async (req, res) => {
 //   const user = await User.findById(req.params.id);
 //   if (!user) {
@@ -270,4 +306,5 @@ module.exports = {
   updateUser,
   loginStatus,
   verifyEmail,
+  verifyUser,
 };
