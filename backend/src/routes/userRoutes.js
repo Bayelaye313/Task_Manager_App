@@ -8,6 +8,7 @@ const {
   loginStatus,
   verifyEmail,
   verifyUser,
+  forgotPassword,
 } = require("../controllers/authControllers");
 const {
   protect,
@@ -34,5 +35,6 @@ router.route("/login-status").get(protect, loginStatus);
 //email verification
 router.route("/verify-email").post(protect, verifyEmail);
 router.route("/verify-user/:verificationToken").post(verifyUser);
+router.route("/forgot-password").post(forgotPassword);
 
 module.exports = router;
