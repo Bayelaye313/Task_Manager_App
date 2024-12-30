@@ -345,6 +345,39 @@ const forgotPassword = asyncHandler(async (req, res) => {
   }
 });
 
+// reset password
+const resetPassword = asyncHandler(async (req, res) => {
+  const { resetPasswordToken } = req.params;
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ message: "Password is required" });
+  }
+
+  // hash the reset token
+  const hashedToken = hashToken(resetPasswordToken);
+
+  // check if token exists and has not expired
+  const userToken = await Token.findOne({
+    passwordResetToken: hashedToken,
+    // check if the token has not expired
+    expiresAt: { $gt: Date.now() },
+  });
+
+  if (!userToken) {
+    return res.status(400).json({ message: "Invalid or expired reset token" });
+  }
+
+  // find user with the user id in the token
+  const user = await User.findById(userToken.userId);
+
+  // update user password
+  user.password = password;
+  await user.save();
+
+  res.status(200).json({ message: "Password reset successfully" });
+});
+
 // const deleteUser = asyncHandler(async (req, res) => {
 //   const user = await User.findById(req.params.id);
 //   if (!user) {
@@ -367,4 +400,5 @@ module.exports = {
   verifyEmail,
   verifyUser,
   forgotPassword,
+  resetPassword,
 };
