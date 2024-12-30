@@ -10,6 +10,7 @@ const {
   verifyUser,
   forgotPassword,
   resetPassword,
+  changePassword,
 } = require("../controllers/authControllers");
 const {
   protect,
@@ -40,4 +41,8 @@ router.route("/verify-user/:verificationToken").post(verifyUser);
 router.route("/forgot-password").post(forgotPassword);
 //reset password
 router.post("/reset-password/:resetPasswordToken", resetPassword);
+
+//update password
+router.patch("/change-password", protect, changePassword);
+
 module.exports = router;

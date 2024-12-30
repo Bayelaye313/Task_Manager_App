@@ -378,6 +378,32 @@ const resetPassword = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Password reset successfully" });
 });
 
+//change password
+const changePassword = asyncHandler(async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch) {
+    return res.status(400).json({ message: "Invalid current password!" });
+  }
+
+  // const hashedPassword = await bcrypt.hash(newPassword, 10);
+  user.password = newPassword;
+  await user.save();
+
+  res.status(200).json({
+    message: "Password changed successfully",
+  });
+});
 // const deleteUser = asyncHandler(async (req, res) => {
 //   const user = await User.findById(req.params.id);
 //   if (!user) {
@@ -401,4 +427,5 @@ module.exports = {
   verifyUser,
   forgotPassword,
   resetPassword,
+  changePassword,
 };
