@@ -1,7 +1,10 @@
 import React from "react";
 import { useUserContext } from "../../context/UserContext";
+import useRedirect from "../../helpers/useuserredirect";
 
 const Dashboard = () => {
+  useRedirect("/login");
+
   const name = "abdoulaye";
   const { logoutUser } = useUserContext();
 

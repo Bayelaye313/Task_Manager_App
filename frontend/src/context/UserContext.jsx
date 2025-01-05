@@ -13,151 +13,110 @@ export const UserContextProvider = ({ children }) => {
   const serverUrl = "http://localhost:5001";
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({});
-  const [allUsers, setAllUsers] = useState([]);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-
   const [userState, setUserState] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  //register user
+  const handleInputChange = (name) => (e) => {
+    setUserState((prev) => ({ ...prev, [name]: e.target.value }));
+  };
 
   const registerUser = async (e) => {
     e.preventDefault();
-    if (
-      !userState.email.includes("@") ||
-      !userState.password ||
-      userState.password.length < 6
-    ) {
+    if (!userState.email.includes("@") || userState.password.length < 6) {
       toast.error("Please enter a valid email and password (min 6 characters)");
       return;
     }
-
     try {
       const res = await axios.post(`${serverUrl}/api/v1/register`, userState);
-      console.log("User registered successfully", res.data);
       toast.success("User registered successfully");
-
-      // clear the form
-      setUserState({
-        name: "",
-        email: "",
-        password: "",
-      });
-
-      // redirect to login page
+      setUserState({ name: "", email: "", password: "" });
       navigate("/login");
     } catch (error) {
-      console.log("Error registering user", error);
-      toast.error(error.response.data.message);
+      console.error("Error registering user", error);
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
-  // handle input change
-  const handleInputChange = (name) => (e) => {
-    const value = e.target.value;
 
-    setUserState((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  // login the user
   const loginUser = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      const res = await axios.post(
-        `${serverUrl}/api/v1/login`,
-        {
-          email: userState.email,
-          password: userState.password,
-        },
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
-      toast.success("User logged in successfully");
-
-      // clear the form
-      setUserState({
-        email: "",
-        password: "",
+      await axios.post(`${serverUrl}/api/v1/login`, {
+        email: userState.email,
+        password: userState.password,
       });
-
-      // refresh the user details
-      // await getUser(); // fetch before redirecting
-
-      // push user to the dashboard page
+      toast.success("User logged in successfully");
+      setUserState({ email: "", password: "" });
+      await getUser();
       navigate("/");
     } catch (error) {
-      console.log("Error logging in user", error);
-      toast.error(error.response.data.message);
+      console.error("Error logging in user", error);
+      toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
-  // logout user
   const logoutUser = async () => {
     try {
-      const res = await axios.get(`${serverUrl}/api/v1/logout`, {
+      await axios.post(`${serverUrl}/api/v1/logout`, {
         withCredentials: true, // send cookies to the server
       });
-
+      setUser(null);
       toast.success("User logged out successfully");
-
-      // redirect to login page
       navigate("/login");
     } catch (error) {
-      console.log("Error logging out user", error);
-      toast.error(error.response.data.message);
+      console.error("Error logging out user", error);
+      toast.error(error.response?.data?.message || "Logout failed");
     }
   };
 
-  // get user Looged in Status
   const userLoginStatus = async () => {
-    let loggedIn = false;
     try {
-      const res = await axios.get(`${serverUrl}/api/v1/login-status`, {
-        withCredentials: true, // send cookies to the server
-      });
-
-      // coerce the string to boolean
-      loggedIn = !!res.data;
-      setLoading(false);
-
-      if (!loggedIn) {
-        navigate("/login");
-      }
+      const res = await axios.get(`${serverUrl}/api/v1/login-status`);
+      return !!res.data;
     } catch (error) {
-      console.log("Error getting user login status", error);
+      console.error("Error checking login status", error);
+      return false;
     }
-
-    return loggedIn;
   };
+
+  const getUser = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${serverUrl}/api/v1/user`);
+      setUser(res.data);
+    } catch (error) {
+      console.error("Error fetching user details", error);
+      toast.error(error.response?.data?.message || "Failed to fetch user data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loginStatusGetUser = async () => {
+    (async () => {
       const isLoggedIn = await userLoginStatus();
-
-      if (isLoggedIn) {
-        // await getUser();
-      }
-    };
-
-    loginStatusGetUser();
+      if (isLoggedIn) await getUser();
+    })();
   }, []);
 
   return (
     <UserContext.Provider
       value={{
-        registerUser,
+        user,
+        loading,
+        userState,
         handleInputChange,
+        registerUser,
         loginUser,
         logoutUser,
-        userState,
-        user,
+        userLoginStatus,
       }}
     >
       {children}
