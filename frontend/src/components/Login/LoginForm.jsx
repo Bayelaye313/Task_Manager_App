@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useUserContext } from "../context/UserContext";
+import { useUserContext } from "../../context/UserContext";
 
-function Login() {
-  const { loginUser, userState, handlerUserInput } = useUserContext();
+function LoginForm() {
+  const { loginUser, userState, handleInputChange } = useUserContext();
   const { email, password } = userState;
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -32,7 +32,7 @@ function Login() {
             type="text"
             id="email"
             value={email}
-            onChange={(e) => handlerUserInput("email")(e)}
+            onChange={(e) => handleInputChange("email")(e)}
             name="email"
             className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
             placeholder="johndoe@gmail.com"
@@ -46,7 +46,7 @@ function Login() {
             type={showPassword ? "text" : "password"}
             id="password"
             value={password}
-            onChange={(e) => handlerUserInput("password")(e)}
+            onChange={(e) => handleInputChange("password")(e)}
             name="password"
             className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
             placeholder="***************"
@@ -86,4 +86,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginForm;

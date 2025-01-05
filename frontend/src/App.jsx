@@ -17,8 +17,8 @@ const PrivateRoute = ({ children }) => {
 
 function App() {
   return (
-    <UserContextProvider>
-      <Router>
+    <Router>
+      <UserContextProvider>
         <Routes>
           <Route path="/register" element={<ResgisterPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -31,8 +31,8 @@ function App() {
             }
           />
         </Routes>
-      </Router>
-    </UserContextProvider>
+      </UserContextProvider>
+    </Router>
   );
 }
 
