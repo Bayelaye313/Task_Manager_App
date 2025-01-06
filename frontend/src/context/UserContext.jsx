@@ -98,6 +98,54 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  // update user details
+  const updateUser = async (e, data) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await axios.patch(`${serverUrl}/api/v1/user`, data, {
+        withCredentials: true, // send cookies to the server
+      });
+
+      // update the user state
+      setUser((prevState) => {
+        return {
+          ...prevState,
+          ...res.data,
+        };
+      });
+
+      toast.success("User updated successfully");
+
+      setLoading(false);
+    } catch (error) {
+      console.log("Error updating user details", error);
+      setLoading(false);
+      toast.error(error.response.data.message);
+    }
+  };
+
+  // email verification
+  const emailVerification = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/verify-email`,
+        {},
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("Email verification sent successfully");
+      setLoading(false);
+    } catch (error) {
+      console.log("Error sending email verification", error);
+      setLoading(false);
+      toast.error(error.response.data.message);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -117,6 +165,8 @@ export const UserContextProvider = ({ children }) => {
         loginUser,
         logoutUser,
         userLoginStatus,
+        updateUser,
+        emailVerification,
       }}
     >
       {children}

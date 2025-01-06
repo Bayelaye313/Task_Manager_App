@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUserContext } from "../../context/UserContext";
 import useRedirect from "../../helpers/useuserredirect";
 
 const Dashboard = () => {
   useRedirect("/login");
 
-  const name = "abdoulaye";
-  const { logoutUser } = useUserContext();
+  const {
+    user,
+    logoutUser,
+    handleInputChange,
+    userState,
+    updateUser,
+    emailVerification,
+  } = useUserContext();
+  const { name, photo, bio, isVerified } = user;
+  // state
+  const [isOpen, setIsOpen] = useState(false);
+
+  // function
+  const myToggle = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <main className="py-[2rem] mx-[10rem]">
@@ -15,15 +29,19 @@ const Dashboard = () => {
           Welcome <span className="text-red-600">{name}</span>
         </h1>
         <div className="flex items-center gap-4">
-          <img src="" alt={name} className="w-[40px] h-[40px] rounded-full" />
-          {/* {!isVerified && (
+          <img
+            src={photo}
+            alt={name}
+            className="w-[40px] h-[40px] rounded-full"
+          />
+          {!isVerified && (
             <button
               className="px-4 py-2 bg-blue-500 text-white rounded-md"
               onClick={emailVerification}
             >
               Verify Account
             </button>
-          )} */}
+          )}
 
           <button
             onClick={logoutUser}
@@ -33,7 +51,7 @@ const Dashboard = () => {
           </button>
         </div>
       </header>
-      {/* <section>
+      <section>
         <p className="text-[#999] text-[2rem]">{bio}</p>
 
         <h1>
@@ -55,7 +73,7 @@ const Dashboard = () => {
                 name="bio"
                 defaultValue={bio}
                 className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
-                onChange={(e) => handlerUserInput("bio")(e)}
+                onChange={(e) => handleInputChange("bio")(e)}
               ></textarea>
             </div>
             <button
@@ -67,7 +85,7 @@ const Dashboard = () => {
             </button>
           </form>
         )}
-      </section> */}
+      </section>
       {/* <div className="mt-4 flex gap-8">
         <div className="flex-1">
           <ChangePasswordForm />
