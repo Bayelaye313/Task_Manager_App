@@ -178,6 +178,51 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  // forgot password email
+  const forgotPasswordEmail = async (email) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/forgot-password`,
+        {
+          email,
+        },
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("Forgot password email sent successfully");
+      setLoading(false);
+    } catch (error) {
+      console.log("Error sending forgot password email", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
+  // change password
+  const changePassword = async (currentPassword, newPassword) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.patch(
+        `${serverUrl}/api/v1/change-password`,
+        { currentPassword, newPassword },
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("Password changed successfully");
+      setLoading(false);
+    } catch (error) {
+      console.log("Error changing password", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
 
   // Check login status
   const userLoginStatus = async () => {
@@ -219,6 +264,9 @@ export const UserContextProvider = ({ children }) => {
         verifyUser,
         deleteUser,
         resetPassword,
+        changePassword,
+        forgotPasswordEmail,
+
         allUsers,
       }}
     >
