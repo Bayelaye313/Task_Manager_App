@@ -17,6 +17,7 @@ const Dashboard = () => {
     allUsers,
   } = useUserContext();
   const { name, photo, bio, isVerified } = user;
+
   // state
   const [isOpen, setIsOpen] = useState(false);
 
@@ -26,20 +27,20 @@ const Dashboard = () => {
   };
 
   return (
-    <main className="py-[2rem] mx-[10rem]">
-      <header className="flex justify-between">
-        <h1 className="text-[2rem] font-bold">
-          Welcome <span className="text-red-600">{name}</span>
+    <main className="py-10 px-8 bg-gradient-to-r from-[#4e73df] to-[#2ECC71] min-h-screen">
+      <header className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-white">
+          Welcome <span className="text-yellow-400">{name}</span>
         </h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <img
             src={photo}
             alt={name}
-            className="w-[40px] h-[40px] rounded-full"
+            className="w-[50px] h-[50px] rounded-full border-2 border-white"
           />
           {!isVerified && (
             <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              className="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition-colors"
               onClick={emailVerification}
             >
               Verify Account
@@ -48,48 +49,52 @@ const Dashboard = () => {
 
           <button
             onClick={logoutUser}
-            className="px-4 py-2 bg-red-600 text-white rounded-md"
+            className="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-500 transition-colors"
           >
             Logout
           </button>
         </div>
       </header>
-      <section>
-        <p className="text-[#999] text-[2rem]">{bio}</p>
 
-        <h1>
+      <section className="text-white mb-8">
+        <p className="text-xl">{bio}</p>
+
+        <div className="mt-6">
           <button
             onClick={myToggle}
-            className="px-4 py-2 bg-[#2ECC71] text-white rounded-md"
+            className="px-6 py-3 bg-[#2ECC71] text-white rounded-md hover:bg-[#1abc9c] transition-colors"
           >
             Update Bio
           </button>
-        </h1>
+        </div>
 
         {isOpen && (
-          <form className="mt-4 px-8 py-4 max-w-[520px] w-full rounded-md">
+          <form
+            className="mt-6 max-w-[600px] mx-auto p-6 rounded-lg bg-white text-gray-800"
+            onSubmit={(e) => updateUser(e, { bio: userState.bio })}
+          >
             <div className="flex flex-col">
-              <label htmlFor="bio" className="mb-1 text-[#999]">
+              <label htmlFor="bio" className="mb-2 text-[#555] text-lg">
                 Bio
               </label>
               <textarea
                 name="bio"
                 defaultValue={bio}
-                className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
+                className="px-4 py-3 border-2 rounded-md outline-none focus:ring-2 focus:ring-[#2ECC71] transition duration-200 ease-in"
                 onChange={(e) => handleInputChange("bio")(e)}
               ></textarea>
             </div>
             <button
               type="submit"
-              onClick={(e) => updateUser(e, { bio: userState.bio })}
-              className="mt-4 px-4 py-2  bg-blue-500 text-white rounded-md"
+              className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-400 transition-colors"
             >
               Update Bio
             </button>
           </form>
         )}
       </section>
-      <div className="mt-4 flex gap-8">
+
+      <div className="flex gap-12">
         <div className="flex-1">
           <ChangePasswordForm />
         </div>
@@ -98,26 +103,26 @@ const Dashboard = () => {
             allUsers.map(
               (user, i) =>
                 user.role !== "admin" && (
-                  <li
+                  <div
                     key={i}
-                    className="mb-2 px-2 py-3 border grid grid-cols-4 items-center gap-8 rounded-md"
+                    className="mb-4 p-4 bg-white shadow-lg rounded-md grid grid-cols-4 gap-8 items-center"
                   >
                     <img
                       src={user.photo}
                       alt={user.name}
-                      className="w-[40px]  h-[40px] rounded-full"
+                      className="w-[40px] h-[40px] rounded-full border-2 border-[#999]"
                     />
-                    <p>{user.name}</p>
-                    <p>{user.bio}</p>
+                    <div className="col-span-2">
+                      <p className="font-semibold">{user.name}</p>
+                      <p className="text-gray-500 text-sm">{user.bio}</p>
+                    </div>
                     <button
-                      className="bg-red-500 text-white p-2 rounded-md"
-                      onClick={() => {
-                        deleteUser(user._id);
-                      }}
+                      className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-400 transition-colors"
+                      onClick={() => deleteUser(user._id)}
                     >
                       Delete User
                     </button>
-                  </li>
+                  </div>
                 )
             )}
         </div>

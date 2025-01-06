@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useUserContext } from "../../../context/UserContext";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const ResetPassword = () => {
   const { resetToken } = useParams();
@@ -68,11 +69,7 @@ const ResetPassword = () => {
               onClick={togglePassword}
               type="button"
             >
-              {showPassword ? (
-                <i className="fas fa-eye-slash"></i>
-              ) : (
-                <i className="fas fa-eye"></i>
-              )}
+              {showPassword ? <EyeOff /> : <Eye />}
             </button>
           </div>
           <div className="relative mt-[1rem] flex flex-col">
@@ -93,11 +90,7 @@ const ResetPassword = () => {
               onClick={togglePassword}
               type="button"
             >
-              {showPassword ? (
-                <i className="fas fa-eye-slash"></i>
-              ) : (
-                <i className="fas fa-eye"></i>
-              )}
+              {showPassword ? <EyeOff /> : <Eye />}
             </button>
           </div>
           <div className="flex">

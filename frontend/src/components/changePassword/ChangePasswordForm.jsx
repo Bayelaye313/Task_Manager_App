@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useUserContext } from "../../context/UserContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const ChangePasswordForm = () => {
   const { changePassword } = useUserContext();
@@ -31,72 +32,74 @@ const ChangePasswordForm = () => {
   };
 
   return (
-    <form className="ml-0 mt-0 m-[2rem] px-10 py-14 rounded-lg bg-white max-w-[520px] w-full">
-      <div className="relative z-10">
-        <h1 className="mb-2 text-center text-[1.35rem] font-medium">
-          Reset Your Password!
-        </h1>
-        <div className="relative mt-[1rem] flex flex-col">
-          <label htmlFor="email" className="mb-1 text-[#999]">
-            Current Password
-          </label>
+    <form className="relative m-auto px-8 py-10 rounded-xl bg-gradient-to-r from-[#4e73df] to-[#2ECC71] w-full max-w-[480px] shadow-lg">
+      <div className="relative z-10 text-center mb-8 text-white">
+        <h1 className="text-2xl font-semibold">Reset Your Password!</h1>
+      </div>
+
+      <div className="mt-4 flex flex-col">
+        <label htmlFor="currentPassword" className="text-white text-sm mb-2">
+          Current Password
+        </label>
+        <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
             value={currentPassword}
             onChange={currentPasswordChange}
-            id="password"
-            name="password"
+            id="currentPassword"
+            name="currentPassword"
             placeholder="*********"
-            className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
+            className="px-4 py-3 rounded-md border border-[#3b3f5c] focus:outline-none focus:ring-2 focus:ring-[#FFE600] transition duration-200 ease-in text-gray-800"
           />
           <button
-            className="absolute p-1 right-4 top-[43%] text-[22px] text-[#999] opacity-45"
+            className="absolute p-1 right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
             onClick={togglePassword}
             type="button"
           >
-            {showPassword ? (
-              <i className="fas fa-eye-slash"></i>
-            ) : (
-              <i className="fas fa-eye"></i>
-            )}
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
-        <div className="relative mt-[1rem] flex flex-col">
-          <label htmlFor="email" className="mb-1 text-[#999]">
-            New Password
-          </label>
+      </div>
+
+      <div className="mt-6 flex flex-col">
+        <label htmlFor="newPassword" className="text-white text-sm mb-2">
+          New Password
+        </label>
+        <div className="relative">
           <input
             type={showPassword ? "text" : "password"}
             value={newPassword}
             onChange={newPasswordChange}
-            id="password"
-            name="password"
+            id="newPassword"
+            name="newPassword"
             placeholder="*********"
-            className="px-4 py-3 border-[2px] rounded-md outline-[#2ECC71] text-gray-800"
+            className="px-4 py-3 rounded-md border border-[#3b3f5c] focus:outline-none focus:ring-2 focus:ring-[#FFE600] transition duration-200 ease-in text-gray-800"
           />
           <button
-            className="absolute p-1 right-4 top-[43%] text-[22px] text-[#999] opacity-45"
+            className="absolute p-1 right-4 top-1/2 transform -translate-y-1/2 text-gray-600"
             onClick={togglePassword}
             type="button"
           >
-            {showPassword ? (
-              <i className="fas fa-eye-slash"></i>
-            ) : (
-              <i className="fas fa-eye"></i>
-            )}
-          </button>
-        </div>
-        <div className="flex">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="mt-[1.5rem] flex-1 px-4 py-3 font-bold bg-[#2ECC71] text-white rounded-md hover:bg-[#1abc9c] transition-colors"
-          >
-            Reset Password
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
       </div>
-      <img src="/flurry.png" alt="" />
+
+      <div className="flex mt-6">
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="w-full py-3 bg-[#FFE600] text-gray-800 font-semibold rounded-md hover:bg-[#FF5733] transition-colors disabled:opacity-50"
+        >
+          Reset Password
+        </button>
+      </div>
+
+      <img
+        src="/flurry.png"
+        alt=""
+        className="absolute bottom-0 right-0 w-32 opacity-30"
+      />
     </form>
   );
 };

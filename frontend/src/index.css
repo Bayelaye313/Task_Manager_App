@@ -5,11 +5,18 @@
 .auth-page {
   height: 100vh;
   background: url("../public/glass-bg.png") no-repeat center center fixed;
+  background-size: cover;
 }
 
 form {
   position: relative;
   box-shadow: 2px 3px 15px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+  backdrop-filter: blur(10px); /* Adds a slight blur effect to the background */
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 520px;
+  width: 100%;
 }
 
 form > img {
