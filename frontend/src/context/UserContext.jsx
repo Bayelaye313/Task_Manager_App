@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-// Créer le contexte utilisateur
+// Create UserContext
 const UserContext = React.createContext();
 
-// Configurer axios
+// Axios configuration
 axios.defaults.withCredentials = true;
 
 export const UserContextProvider = ({ children }) => {
@@ -15,17 +15,24 @@ export const UserContextProvider = ({ children }) => {
 
   const [user, setUser] = useState({ role: "", name: "", email: "" });
   const [loading, setLoading] = useState(false);
-  const [allUsers, setAllUsers] = useState([]);
   const [userState, setUserState] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const [allUsers, setAllUsers] = useState([]);
 
-  const handleInputChange = (name) => (e) => {
-    setUserState((prev) => ({ ...prev, [name]: e.target.value }));
+  // Handle form inputs
+  const handleInputChange = (field) => (e) => {
+    setUserState((prevState) => ({ ...prevState, [field]: e.target.value }));
   };
 
+  // Error handling function
+  const handleError = (error) => {
+    toast.error(error.response?.data?.message || "An error occurred");
+  };
+
+  // Register user
   const registerUser = async (e) => {
     e.preventDefault();
     if (!userState.email.includes("@") || userState.password.length < 6) {
@@ -33,16 +40,16 @@ export const UserContextProvider = ({ children }) => {
       return;
     }
     try {
-      const res = await axios.post(`${serverUrl}/api/v1/register`, userState);
+      await axios.post(`${serverUrl}/api/v1/register`, userState);
       toast.success("User registered successfully");
       setUserState({ name: "", email: "", password: "" });
       navigate("/login");
     } catch (error) {
-      console.error("Error registering user", error);
-      toast.error(error.response?.data?.message || "Registration failed");
+      handleError(error);
     }
   };
 
+  // Login user
   const loginUser = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -56,234 +63,130 @@ export const UserContextProvider = ({ children }) => {
       await getUser();
       navigate("/");
     } catch (error) {
-      console.error("Error logging in user", error);
-      toast.error(error.response?.data?.message || "Login failed");
+      handleError(error);
     } finally {
       setLoading(false);
     }
   };
 
+  // Logout user
   const logoutUser = async () => {
     try {
-      await axios.post(`${serverUrl}/api/v1/logout`, {
-        withCredentials: true, // send cookies to the server
-      });
+      await axios.post(`${serverUrl}/api/v1/logout`);
       setUser(null);
       toast.success("User logged out successfully");
       navigate("/login");
     } catch (error) {
-      console.error("Error logging out user", error);
-      toast.error(error.response?.data?.message || "Logout failed");
+      handleError(error);
     }
   };
 
-  const userLoginStatus = async () => {
-    try {
-      const res = await axios.get(`${serverUrl}/api/v1/login-status`);
-      return !!res.data;
-    } catch (error) {
-      console.error("Error checking login status", error);
-      return false;
-    }
-  };
-
+  // Get logged-in user
   const getUser = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`${serverUrl}/api/v1/user`);
       setUser(res.data);
     } catch (error) {
-      console.error("Error fetching user details", error);
-      toast.error(error.response?.data?.message || "Failed to fetch user data");
+      handleError(error);
     } finally {
       setLoading(false);
     }
   };
-  // update user details
+
+  // Update user details
   const updateUser = async (e, data) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      const res = await axios.patch(`${serverUrl}/api/v1/user`, data, {
-        withCredentials: true, // send cookies to the server
-      });
-
-      // update the user state
-      setUser((prevState) => {
-        return {
-          ...prevState,
-          ...res.data,
-        };
-      });
-
+      const res = await axios.patch(`${serverUrl}/api/v1/user`, data);
+      setUser((prevState) => ({ ...prevState, ...res.data }));
       toast.success("User updated successfully");
-
-      setLoading(false);
     } catch (error) {
-      console.log("Error updating user details", error);
+      handleError(error);
+    } finally {
       setLoading(false);
-      toast.error(error.response.data.message);
     }
   };
 
-  // email verification
+  // Verify email
   const emailVerification = async () => {
     setLoading(true);
     try {
-      const res = await axios.post(
-        `${serverUrl}/api/v1/verify-email`,
-        {},
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
+      await axios.post(`${serverUrl}/api/v1/verify-email`);
       toast.success("Email verification sent successfully");
-      setLoading(false);
     } catch (error) {
-      console.log("Error sending email verification", error);
+      handleError(error);
+    } finally {
       setLoading(false);
-      toast.error(error.response.data.message);
     }
   };
 
-  // verify user/email
+  // Verify user
   const verifyUser = async (token) => {
     setLoading(true);
     try {
-      const res = await axios.post(
-        `${serverUrl}/api/v1/verify-user/${token}`,
-        {},
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
+      await axios.post(`${serverUrl}/api/v1/verify-user/${token}`);
       toast.success("User verified successfully");
-
-      // refresh the user details
-      getUser();
-
-      setLoading(false);
-      // redirect to home page
+      await getUser();
       navigate("/");
     } catch (error) {
-      console.log("Error verifying user", error);
-      toast.error(error.response.data.message);
+      handleError(error);
+    } finally {
       setLoading(false);
     }
   };
 
-  // forgot password email
-  const forgotPasswordEmail = async (email) => {
-    setLoading(true);
-
-    try {
-      const res = await axios.post(
-        `${serverUrl}/api/v1/forgot-password`,
-        {
-          email,
-        },
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
-      toast.success("Forgot password email sent successfully");
-      setLoading(false);
-    } catch (error) {
-      console.log("Error sending forgot password email", error);
-      toast.error(error.response.data.message);
-      setLoading(false);
-    }
-  };
-  // reset password
+  // Reset password
   const resetPassword = async (token, password) => {
     setLoading(true);
-
     try {
-      const res = await axios.post(
-        `${serverUrl}/api/v1/reset-password/${token}`,
-        {
-          password,
-        },
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
+      await axios.post(`${serverUrl}/api/v1/reset-password/${token}`, {
+        password,
+      });
       toast.success("Password reset successfully");
-      setLoading(false);
-      // redirect to login page
       navigate("/login");
     } catch (error) {
-      console.log("Error resetting password", error);
-      toast.error(error.response.data.message);
+      handleError(error);
+    } finally {
       setLoading(false);
     }
   };
-  // change password
-  const changePassword = async (currentPassword, newPassword) => {
-    setLoading(true);
 
-    try {
-      const res = await axios.patch(
-        `${serverUrl}/api/v1/change-password`,
-        { currentPassword, newPassword },
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
-      toast.success("Password changed successfully");
-      setLoading(false);
-    } catch (error) {
-      console.log("Error changing password", error);
-      toast.error(error.response.data.message);
-      setLoading(false);
-    }
-  };
-  // admin routes
+  // Admin routes
   const getAllUsers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(
-        `${serverUrl}/api/v1/admin/users`,
-        {},
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-      //console.log("API Response:", res.data); // Debugging
+      const res = await axios.get(`${serverUrl}/api/v1/admin/users`);
       setAllUsers(res.data.users);
-      setLoading(false);
     } catch (error) {
-      console.log("Error getting all users", error);
-      toast.error(error.response.data.message);
+      handleError(error);
+    } finally {
       setLoading(false);
     }
   };
-  // delete user
+
   const deleteUser = async (id) => {
     setLoading(true);
     try {
-      const res = await axios.delete(
-        `${serverUrl}/api/v1/admin/users/${id}`,
-        {},
-        {
-          withCredentials: true, // send cookies to the server
-        }
-      );
-
+      await axios.delete(`${serverUrl}/api/v1/admin/users/${id}`);
       toast.success("User deleted successfully");
-      setLoading(false);
-      // refresh the users list
-      getAllUsers();
+      await getAllUsers();
     } catch (error) {
-      console.log("Error deleting user", error);
-      toast.error(error.response.data.message);
+      handleError(error);
+    } finally {
       setLoading(false);
+    }
+  };
+
+  // Check login status
+  const userLoginStatus = async () => {
+    try {
+      const res = await axios.get(`${serverUrl}/api/v1/login-status`);
+      return !!res.data;
+    } catch (error) {
+      handleError(error);
+      return false;
     }
   };
 
@@ -293,8 +196,9 @@ export const UserContextProvider = ({ children }) => {
       if (isLoggedIn) await getUser();
     })();
   }, []);
+
   useEffect(() => {
-    if (user && user?.role === "admin") {
+    if (user?.role === "admin") {
       getAllUsers();
     }
   }, [user?.role]);
@@ -314,9 +218,7 @@ export const UserContextProvider = ({ children }) => {
         emailVerification,
         verifyUser,
         deleteUser,
-        forgotPasswordEmail,
         resetPassword,
-        changePassword,
         allUsers,
       }}
     >
@@ -325,7 +227,5 @@ export const UserContextProvider = ({ children }) => {
   );
 };
 
-// Hook personnalisé pour utiliser le contexte
-export const useUserContext = () => {
-  return useContext(UserContext);
-};
+// Custom hook to use the context
+export const useUserContext = () => useContext(UserContext);
