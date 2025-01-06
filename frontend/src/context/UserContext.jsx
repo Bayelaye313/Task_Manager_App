@@ -222,6 +222,28 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  // change password
+  const changePassword = async (currentPassword, newPassword) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.patch(
+        `${serverUrl}/api/v1/change-password`,
+        { currentPassword, newPassword },
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("Password changed successfully");
+      setLoading(false);
+    } catch (error) {
+      console.log("Error changing password", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const isLoggedIn = await userLoginStatus();
@@ -245,6 +267,7 @@ export const UserContextProvider = ({ children }) => {
         verifyUser,
         forgotPasswordEmail,
         resetPassword,
+        changePassword,
       }}
     >
       {children}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useUserContext } from "../../context/UserContext";
 import useRedirect from "../../helpers/useuserredirect";
+import ChangePasswordForm from "../changePassword/ChangePasswordForm";
 
 const Dashboard = () => {
   useRedirect("/login");
@@ -86,11 +87,11 @@ const Dashboard = () => {
           </form>
         )}
       </section>
-      {/* <div className="mt-4 flex gap-8">
+      <div className="mt-4 flex gap-8">
         <div className="flex-1">
           <ChangePasswordForm />
         </div>
-        <div className="flex-1">
+        {/* <div className="flex-1">
           {user.role === "admin" && (
             <ul>
               {allUsers.map(
@@ -120,8 +121,8 @@ const Dashboard = () => {
               )}
             </ul>
           )}
-        </div>
-      </div> */}
+        </div> */}
+      </div>
     </main>
   );
 };
