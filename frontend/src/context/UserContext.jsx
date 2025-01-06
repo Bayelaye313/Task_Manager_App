@@ -147,6 +147,81 @@ export const UserContextProvider = ({ children }) => {
     }
   };
 
+  // verify user/email
+  const verifyUser = async (token) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/verify-user/${token}`,
+        {},
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("User verified successfully");
+
+      // refresh the user details
+      getUser();
+
+      setLoading(false);
+      // redirect to home page
+      navigate("/");
+    } catch (error) {
+      console.log("Error verifying user", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+
+  // forgot password email
+  const forgotPasswordEmail = async (email) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/forgot-password`,
+        {
+          email,
+        },
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("Forgot password email sent successfully");
+      setLoading(false);
+    } catch (error) {
+      console.log("Error sending forgot password email", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+  // reset password
+  const resetPassword = async (token, password) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/v1/reset-password/${token}`,
+        {
+          password,
+        },
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("Password reset successfully");
+      setLoading(false);
+      // redirect to login page
+      navigate("/login");
+    } catch (error) {
+      console.log("Error resetting password", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     (async () => {
       const isLoggedIn = await userLoginStatus();
@@ -167,6 +242,9 @@ export const UserContextProvider = ({ children }) => {
         userLoginStatus,
         updateUser,
         emailVerification,
+        verifyUser,
+        forgotPasswordEmail,
+        resetPassword,
       }}
     >
       {children}

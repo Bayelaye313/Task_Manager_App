@@ -196,57 +196,42 @@ const loginStatus = asyncHandler(async (req, res) => {
 
 //user email verification
 const verifyEmail = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
-  // if user exists
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  // check if user is already verified
-  if (user.isVerified) {
-    return res.status(400).json({ message: "User is already verified" });
-  }
-
-  let token = await Token.findOne({ userId: user._id });
-
-  // if token exists --> delete the token
-  if (token) {
-    await token.deleteOne();
-  }
-
-  // create a verification token using the user id --->
-  const verificationToken = crypto.randomBytes(64).toString("hex") + user._id;
-
-  // hast the verification token
-  const hashedToken = hashToken(verificationToken);
-
-  await new Token({
-    userId: user._id,
-    verificationToken: hashedToken,
-    createdAt: Date.now(),
-    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
-  }).save();
-
-  // verification link
-  const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
-
-  // send email
-  const subject = "Email Verification - AuthKit";
-  const send_to = user.email;
-  const reply_to = "noreply@gmail.com";
-  const template = "emailVerification";
-  const send_from = process.env.USER_EMAIL;
-  const name = user.name;
-  const url = verificationLink;
-
   try {
-    // order matters ---> subject, send_to, send_from, reply_to, template, name, url
-    await sendEmail(subject, send_to, send_from, reply_to, template, name, url);
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User is already verified" });
+    }
+    let token = await Token.findOne({ userId: user._id });
+    if (token) {
+      await token.deleteOne();
+    }
+    const verificationToken = crypto.randomBytes(64).toString("hex") + user._id;
+    const hashedToken = hashToken(verificationToken);
+    await new Token({
+      userId: user._id,
+      verificationToken: hashedToken,
+      createdAt: Date.now(),
+      expiresAt: Date.now() + 24 * 60 * 60 * 1000,
+    }).save();
+    const verificationLink = `${process.env.CLIENT_URL}/verify-email/${verificationToken}`;
+    await sendEmail(
+      "Email Verification - AuthKit",
+      user.email,
+      process.env.USER_EMAIL,
+      "noreply@gmail.com",
+      "emailVerification",
+      user.name,
+      verificationLink
+    );
     return res.json({ message: "Email sent" });
   } catch (error) {
-    console.log("Error sending email: ", error);
-    return res.status(500).json({ message: "Email could not be sent" });
+    console.error("Error in verifyEmail:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while verifying email" });
   }
 });
 
