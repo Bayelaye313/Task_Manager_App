@@ -13,8 +13,9 @@ export const UserContextProvider = ({ children }) => {
   const serverUrl = "http://localhost:5001";
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({ role: "", name: "", email: "" });
   const [loading, setLoading] = useState(false);
+  const [allUsers, setAllUsers] = useState([]);
   const [userState, setUserState] = useState({
     name: "",
     email: "",
@@ -243,6 +244,48 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     }
   };
+  // admin routes
+  const getAllUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        `${serverUrl}/api/v1/admin/users`,
+        {},
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+      //console.log("API Response:", res.data); // Debugging
+      setAllUsers(res.data.users);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error getting all users", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
+  // delete user
+  const deleteUser = async (id) => {
+    setLoading(true);
+    try {
+      const res = await axios.delete(
+        `${serverUrl}/api/v1/admin/users/${id}`,
+        {},
+        {
+          withCredentials: true, // send cookies to the server
+        }
+      );
+
+      toast.success("User deleted successfully");
+      setLoading(false);
+      // refresh the users list
+      getAllUsers();
+    } catch (error) {
+      console.log("Error deleting user", error);
+      toast.error(error.response.data.message);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -250,6 +293,11 @@ export const UserContextProvider = ({ children }) => {
       if (isLoggedIn) await getUser();
     })();
   }, []);
+  useEffect(() => {
+    if (user && user?.role === "admin") {
+      getAllUsers();
+    }
+  }, [user?.role]);
 
   return (
     <UserContext.Provider
@@ -265,9 +313,11 @@ export const UserContextProvider = ({ children }) => {
         updateUser,
         emailVerification,
         verifyUser,
+        deleteUser,
         forgotPasswordEmail,
         resetPassword,
         changePassword,
+        allUsers,
       }}
     >
       {children}
