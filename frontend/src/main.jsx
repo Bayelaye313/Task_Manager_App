@@ -20,6 +20,9 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import PageEmailverif from "./components/verify-email/[verificationToken]/verifEmailPage";
 import ForgotPassword from "./layouts/ForgotPassword";
 import ResetPassword from "./components/reset-password/[resetToken]/resetPassword";
+import PendingTask from "./layouts/PendingTask";
+import CompletedTask from "./layouts/CompletedTask";
+import OverdueTask from "./layouts/OverdueTask";
 
 // Route privée
 const PrivateRoute = ({ children }) => {
@@ -38,6 +41,10 @@ createRoot(document.getElementById("root")).render(
             {/* Routes publiques */}
             <Route path="/register" element={<ResgisterPage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/pending" element={<PendingTask />} />
+            <Route path="/completed" element={<CompletedTask />} />
+            <Route path="/overdue" element={<OverdueTask />} />
+
             <Route
               path="/verify-email/:verificationToken"
               element={<PageEmailverif />}
