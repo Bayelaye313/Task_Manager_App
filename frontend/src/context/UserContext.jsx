@@ -13,7 +13,7 @@ export const UserContextProvider = ({ children }) => {
   const serverUrl = "http://localhost:5001";
   const navigate = useNavigate();
 
-  const [user, setUser] = useState({ role: "", name: "", email: "" });
+  const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [userState, setUserState] = useState({
     name: "",

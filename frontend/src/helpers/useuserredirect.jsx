@@ -3,15 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 
 const useRedirect = (redirect) => {
-  const { userLoginStatus } = useUserContext();
+  const { user, loading } = useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     const redirectUser = async () => {
       try {
-        const isLoggedUser = await userLoginStatus();
-
-        if (!isLoggedUser) {
+        if (!loading && (!user || !user.email)) {
           navigate(redirect);
         }
       } catch (error) {
@@ -20,7 +18,7 @@ const useRedirect = (redirect) => {
     };
 
     redirectUser();
-  }, [redirect, userLoginStatus, navigate]);
+  }, [redirect, user, navigate]);
 };
 
 export default useRedirect;
