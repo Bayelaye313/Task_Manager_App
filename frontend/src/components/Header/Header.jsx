@@ -2,15 +2,12 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Github, Moon, User } from "lucide-react";
 import { useUserContext } from "../../context/UserContext";
+import { useTasks } from "@/context/TaskContext";
 
 function Header() {
   const { user } = useUserContext();
-  const activeTasks = 5; // Exemple de tâches actives
+  const { openModalForAdd, activeTasks } = useTasks();
   const navigate = useNavigate();
-
-  const openModalForAdd = () => {
-    console.log("Ouvrir la modale pour ajouter une tâche");
-  };
 
   const userId = user._id;
   const { name } = user;
@@ -28,7 +25,9 @@ function Header() {
           {userId ? (
             <>
               You have{" "}
-              <span className="font-bold text-[#3aafae]">{activeTasks}</span>
+              <span className="font-bold text-[#3aafae]">
+                {activeTasks.length}
+              </span>
               &nbsp;active tasks
             </>
           ) : (

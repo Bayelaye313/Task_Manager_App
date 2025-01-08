@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+.main-layout::-webkit-scrollbar {
+  width: 0;
+}
+body {
+  background-color: #f9f9f9;
+  height: 100vh;
+  position: relative;
+}
+/* Utilities */
+.u-triangle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -7px;
+  width: 0;
+  height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-right: 8px solid #3aafae;
+  transform: translateY(-50%);
+}
 .auth-page {
   height: 100vh;
   background: url("../public/glass-bg.png") no-repeat center center fixed;

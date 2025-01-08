@@ -1,19 +1,29 @@
 import React from "react";
 import { useUserContext } from "../../context/UserContext";
 import UserProfile from "../profil/UserProfil";
-import RadialCHart from "../ui/utilities/RadialChart";
+import RadialChart from "../ui/utilities/RadialChart";
 
 function Sidebar() {
   const { logoutUser } = useUserContext();
+
   return (
-    <div className="w-[20rem] mt-[5rem] h-[calc(100%-5rem)] fixed right-0 top-0 bg-[#f9f9f9] flex flex-col">
+    <div
+      className="w-[20rem] fixed top-0 right-0 h-auto bg-[#f9f9f9] flex flex-col 
+                 border-l border-gray-200 shadow-md p-4 overflow-y-auto"
+      style={{ maxHeight: "100vh" }} // Limite la hauteur pour s'adapter à l'écran
+    >
+      {/* Profil de l'utilisateur */}
       <UserProfile />
-      <div className="mt-4 mx-6">
-        <RadialCHart />
+
+      {/* Graphique radial */}
+      <div className="mt-4 mb-4">
+        <RadialChart />
       </div>
 
+      {/* Bouton de déconnexion */}
       <button
-        className="mt-auto mb-6 mx-6 py-4 px-8 bg-[#EB4E31] text-white rounded-[50px] hover:bg-[#3aafae] transition duration-200 ease-in-out"
+        className="mt-auto py-3 px-6 bg-[#EB4E31] text-white rounded-lg 
+                   hover:bg-[#3aafae] transition-all duration-200"
         onClick={logoutUser}
       >
         Sign Out

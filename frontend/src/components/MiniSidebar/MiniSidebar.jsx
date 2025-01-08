@@ -1,14 +1,12 @@
 "use client";
 
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
 function MiniSidebar() {
-  const pathname = window.location.pathname; // Utilisation de `window.location` pour remplacer `usePathname`
-
-  // Détermine la couleur du trait en fonction de la route actuelle
+  const pathname = useLocation().pathname;
   const getStrokeColor = (link) => (pathname === link ? "#3aafae" : "#71717a");
 
-  // Navigation items
   const navItems = [
     {
       icon: (
@@ -94,27 +92,20 @@ function MiniSidebar() {
 
   return (
     <div className="basis-[5rem] flex flex-col bg-[#f9f9f9]">
-      {/* Logo Section */}
       <div className="flex items-center justify-center h-[5rem]">
-        <div className="w-7 h-7 bg-gray-500 rounded-full" />{" "}
-        {/* Logo Placeholder */}
+        <div className="w-7 h-7 bg-gray-500 rounded-full" />
       </div>
-
-      {/* Navigation Section */}
       <div className="mt-8 flex-1 flex flex-col items-center justify-between">
         <ul className="flex flex-col gap-10">
           {navItems.map((item, index) => (
             <li key={index} className="relative group">
-              <a href={item.link}>{item.icon}</a>
-              {/* Tooltip */}
+              <Link to={item.link}>{item.icon}</Link>
               <span className="absolute top-[50%] translate-y-[-50%] left-8 text-xs pointer-events-none text-white bg-[#3aafae] px-2 py-1 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 {item.title}
               </span>
             </li>
           ))}
         </ul>
-
-        {/* Delete All Button */}
         <div className="mb-[1.5rem]">
           <button className="w-12 h-12 flex justify-center items-center border-2 border-[#EB4E31] p-2 rounded-full">
             <svg
