@@ -3,7 +3,7 @@ import { useTasks } from "@/context/TaskContext";
 import useTrackOutside from "@/helpers/useTrackOutside";
 import React, { useEffect, useRef } from "react";
 
-function Modal() {
+function ModalForm() {
   const {
     task,
     handleInput,
@@ -130,4 +130,4 @@ function Modal() {
   );
 }
 
-export default Modal;
+export default ModalForm;

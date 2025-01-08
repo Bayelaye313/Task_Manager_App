@@ -3,6 +3,7 @@ import React from "react";
 import { useTasks } from "@/context/TaskContext";
 import { Star, Edit, Trash } from "lucide-react";
 import FormateDate from "@/helpers/FormateDate";
+import { item } from "@/components/Dashboard/Dashboard";
 
 function TaskItemsCard({ task }) {
   const getPriorityColor = (priority) => {
@@ -23,7 +24,7 @@ function TaskItemsCard({ task }) {
   return (
     <div
       className="h-[16rem] px-4 py-3 flex flex-col gap-4 shadow-sm bg-[#f9f9f9] rounded-lg border-2 border-white"
-      variants={i}
+      variants={item}
     >
       <div>
         <h4 className="font-bold text-2xl">{task.title}</h4>
