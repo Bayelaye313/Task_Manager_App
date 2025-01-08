@@ -9,8 +9,8 @@ function Header() {
   const { openModalForAdd, activeTasks } = useTasks();
   const navigate = useNavigate();
 
-  const userId = user._id;
-  const { name } = user;
+  const userId = user ? user._id : null;
+  const name = user ? user.name : "Guest";
 
   return (
     <header className="px-6 my-4 w-full flex items-center justify-between bg-[#f9f9f9]">
@@ -19,7 +19,7 @@ function Header() {
           <span role="img" aria-label="wave">
             👋
           </span>
-          {userId ? `Welcome, ${name}!` : "Welcome to Taskfyer"}
+          {userId ? `Welcome, ${name}!` : "Welcome to our Modern TaskManager"}
         </h1>
         <p className="text-sm">
           {userId ? (

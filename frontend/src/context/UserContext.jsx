@@ -69,10 +69,17 @@ export const UserContextProvider = ({ children }) => {
     }
   };
 
-  // Logout user
   const logoutUser = async () => {
     try {
       await axios.post(`${serverUrl}/api/v1/logout`);
+
+      // Supprimer le token du stockage local
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+      document.cookie =
+        "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+      // Supprimer les informations utilisateur et rediriger
       setUser(null);
       toast.success("User logged out successfully");
       navigate("/login");

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Grid, CheckCircle, ArrowUpDown, Clock, X } from "lucide-react";
 
 function MiniSidebar() {
   const pathname = useLocation().pathname;
@@ -9,82 +10,22 @@ function MiniSidebar() {
 
   const navItems = [
     {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke={getStrokeColor("/")}
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"
-          />
-        </svg>
-      ),
+      icon: <Grid color={getStrokeColor("/")} size={24} />,
       title: "All",
       link: "/",
     },
     {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke={getStrokeColor("/completed")}
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M5 13l4 4L19 7"
-          />
-        </svg>
-      ),
+      icon: <CheckCircle color={getStrokeColor("/completed")} size={24} />,
       title: "Completed",
       link: "/completed",
     },
     {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke={getStrokeColor("/pending")}
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M8 16l4-4 4 4m0-8l-4 4-4-4"
-          />
-        </svg>
-      ),
+      icon: <ArrowUpDown color={getStrokeColor("/pending")} size={24} />,
       title: "Pending",
       link: "/pending",
     },
     {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke={getStrokeColor("/overdue")}
-          className="w-6 h-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6v6l4 2m0-10H8m16 6c0 8.837-7.163 16-16 16S0 20.837 0 12 7.163 0 16 0s16 7.163 16 16z"
-          />
-        </svg>
-      ),
+      icon: <Clock color={getStrokeColor("/overdue")} size={24} />,
       title: "Overdue",
       link: "/overdue",
     },
@@ -93,7 +34,13 @@ function MiniSidebar() {
   return (
     <div className="basis-[5rem] flex flex-col bg-[#f9f9f9]">
       <div className="flex items-center justify-center h-[5rem]">
-        <div className="w-7 h-7 bg-gray-500 rounded-full" />
+        <img
+          src="/saitama.jpg"
+          className="rounded-full"
+          width={28}
+          height={28}
+          alt="logo"
+        />{" "}
       </div>
       <div className="mt-8 flex-1 flex flex-col items-center justify-between">
         <ul className="flex flex-col gap-10">
@@ -108,20 +55,7 @@ function MiniSidebar() {
         </ul>
         <div className="mb-[1.5rem]">
           <button className="w-12 h-12 flex justify-center items-center border-2 border-[#EB4E31] p-2 rounded-full">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="#EB4E31"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            <X color="#EB4E31" size={24} />
           </button>
         </div>
       </div>

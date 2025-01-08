@@ -4,7 +4,7 @@ import Filter from "../ui/utilities/Filter";
 import { useTasks } from "@/context/TaskContext";
 import TaskItemsCard from "@/layouts/TaskItemsCard";
 import { filteredTasks as filterTasks } from "@/helpers/FilterTasks";
-
+import { motion } from "motion/react";
 export const container = {
   hidden: { opacity: 0 },
   visible: {
@@ -38,7 +38,7 @@ const Dashboard = () => {
         <h1 className="text-2xl font-bold">Overdue Tasks</h1>
         <Filter />
       </div>
-      <div
+      <motion.div
         className="pb-[2rem] mt-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[1.5rem]"
         variants={container}
         initial="hidden"
@@ -47,15 +47,15 @@ const Dashboard = () => {
         {filteredTasks.map((task, i) => (
           <TaskItemsCard key={i} task={task} />
         ))}
-        <button
+        <motion.button
           className="h-[16rem] w-full py-2 rounded-md text-lg font-medium text-gray-500 border-dashed border-2 border-gray-400
           hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out"
           onClick={openModalForAdd}
           variants={item}
         >
           Add New Task
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
     </main>
   );
 };

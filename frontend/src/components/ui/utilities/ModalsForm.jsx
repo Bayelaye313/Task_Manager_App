@@ -103,6 +103,23 @@ function ModalForm() {
             onChange={(e) => handleInput("dueDate")(e)}
           />
         </div>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="completed">Task Completed</label>
+          <div className="flex items-center justify-between bg-[#F9F9F9] p-2 rounded-md border">
+            <label htmlFor="completed">Completed</label>
+            <div>
+              <select
+                className="bg-[#F9F9F9] p-2 rounded-md border cursor-pointer"
+                name="completed"
+                value={task.completed ? "true" : "false"}
+                onChange={(e) => handleInput("completed")(e)}
+              >
+                <option value="false">No</option>
+                <option value="true">Yes</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <div className="mt-8">
           <button
             type="submit"

@@ -7,6 +7,7 @@ import { useTasks } from "@/context/TaskContext";
 import { filteredTasks } from "../helpers/FilterTasks";
 import { container, item } from "@/components/Dashboard/Dashboard";
 import useRedirect from "@/helpers/useuserredirect";
+import { motion } from "motion/react";
 
 export default function CompletedTask() {
   useRedirect("/login");
@@ -26,7 +27,7 @@ export default function CompletedTask() {
         <Filter />
       </div>
 
-      <div
+      <motion.div
         className="pb-[2rem] mt-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[1.5rem]"
         variants={container}
         initial="hidden"
@@ -43,7 +44,7 @@ export default function CompletedTask() {
         >
           Add New Task
         </button>
-      </div>
+      </motion.div>
     </main>
   );
 }

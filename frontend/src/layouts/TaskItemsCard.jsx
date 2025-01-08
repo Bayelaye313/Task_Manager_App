@@ -4,6 +4,7 @@ import { useTasks } from "@/context/TaskContext";
 import { Star, Edit, Trash } from "lucide-react";
 import FormateDate from "@/helpers/FormateDate";
 import { item } from "@/components/Dashboard/Dashboard";
+import { motion } from "motion/react";
 
 function TaskItemsCard({ task }) {
   const getPriorityColor = (priority) => {
@@ -22,7 +23,7 @@ function TaskItemsCard({ task }) {
   const { getTask, openModalForEdit, deleteTask, modalMode } = useTasks();
 
   return (
-    <div
+    <motion.div
       className="h-[16rem] px-4 py-3 flex flex-col gap-4 shadow-sm bg-[#f9f9f9] rounded-lg border-2 border-white"
       variants={item}
     >
@@ -64,7 +65,7 @@ function TaskItemsCard({ task }) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

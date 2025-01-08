@@ -8,6 +8,7 @@ import { useTasks } from "@/context/TaskContext";
 import { filteredTasks } from "../helpers/FilterTasks";
 import { container, item } from "@/components/Dashboard/Dashboard";
 import useRedirect from "@/helpers/useuserredirect";
+import { motion } from "motion/react";
 
 export const overdueTasks = (tasks) => {
   const todayDate = moment();
@@ -33,11 +34,11 @@ export default function OverdueTask() {
   return (
     <main className="m-6 h-full ">
       <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">OverdueTasks</h1>
+        <h1 className="text-2xl font-bold">Overdue Tasks</h1>
         <Filter />
       </div>
 
-      <div
+      <motion.div
         className="pb-[2rem] mt-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[1.5rem]"
         variants={container}
         initial="hidden"
@@ -54,7 +55,7 @@ export default function OverdueTask() {
         >
           Add New Task
         </button>
-      </div>
+      </motion.div>
     </main>
   );
 }

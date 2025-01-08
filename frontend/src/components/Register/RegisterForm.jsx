@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useUserContext } from "../../context/UserContext";
 import { Eye, EyeOff } from "lucide-react";
 
 const RegisterForm = () => {
   const { registerUser, handleInputChange, userState } = useUserContext();
   const { email, name, password } = userState;
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => setShowPassword(!showPassword);
 

@@ -3,7 +3,8 @@ import { useUserContext } from "../context/UserContext";
 import Sidebar from "../components/Sidebar/Sidebar";
 
 function SidebarProvider() {
-  const userId = useUserContext().user._id;
+  const { user } = useUserContext();
+  const userId = user ? user._id : null;
   return <>{userId && <Sidebar />}</>;
 }
 

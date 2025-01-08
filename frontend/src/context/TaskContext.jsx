@@ -8,7 +8,9 @@ const TasksContext = createContext();
 const serverUrl = "http://localhost:5001";
 
 export const TasksProvider = ({ children }) => {
-  const userId = useUserContext().user._id;
+  const { user } = useUserContext();
+  const userId = user ? user._id : null;
+
   //   console.log("usid", userId);
   const defaultTask = {
     title: "",
@@ -145,10 +147,12 @@ export const TasksProvider = ({ children }) => {
   const activeTasks = tasks.filter((task) => !task.completed);
 
   useEffect(() => {
-    getTasks();
+    if (userId) {
+      getTasks();
+    }
   }, [userId]);
 
-  console.log("Active tasks", activeTasks);
+  // console.log("Active tasks", activeTasks);
 
   return (
     <TasksContext.Provider

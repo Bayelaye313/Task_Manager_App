@@ -144,8 +144,14 @@ const loginUser = asyncHandler(async (req, res) => {
 
 //logout user
 const logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ message: "user logged out" });
+  req.session.destroy((err) => {
+    if (err) {
+      res.status(500).json({ message: "Failed to logout" });
+    } else {
+      res.clearCookie("connect.id"); // Supprimer le cookie de session
+      res.status(200).json({ message: "User logged out successfully" });
+    }
+  });
 });
 
 //update user
