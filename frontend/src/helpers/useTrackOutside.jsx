@@ -1,18 +1,18 @@
 import { useEffect } from "react";
 
-function useTrackOutside(ref, callback) {
+function useTrackOutside({ ref, callback }) {
   useEffect(() => {
-    // Handler pour détecter les clics en dehors du ref
     const handleClickOutside = (event) => {
+      // Vérifier si le clic est en dehors du ref
       if (ref.current && !ref.current.contains(event.target)) {
-        callback();
+        callback(); // Appeler la fonction de fermeture
       }
     };
 
-    // Ajouter l'écouteur d'événement
+    // Ajouter l'écouteur d'événements
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Nettoyage
+    // Nettoyer l'écouteur lors du démontage
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };

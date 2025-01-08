@@ -10,10 +10,18 @@ const serverUrl = "http://localhost:5001";
 export const TasksProvider = ({ children }) => {
   const userId = useUserContext().user._id;
   //   console.log("usid", userId);
+  const defaultTask = {
+    title: "",
+    description: "",
+    priority: "low",
+    dueDate: "",
+    completed: false,
+  };
+
+  const [task, setTask] = useState(defaultTask);
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [task, setTask] = useState({});
 
   const [isEditing, setIsEditing] = useState(false);
   const [priority, setPriority] = useState("all");
@@ -63,7 +71,7 @@ export const TasksProvider = ({ children }) => {
   const getTask = async (taskId) => {
     setLoading(true);
     try {
-      const response = await axios.get(`${serverUrl}/task/api/v1/${taskId}`);
+      const response = await axios.get(`${serverUrl}/api/v1/task/${taskId}`);
 
       setTask(response.data);
     } catch (error) {
@@ -90,7 +98,10 @@ export const TasksProvider = ({ children }) => {
   const updateTask = async (task) => {
     setLoading(true);
     try {
-      const res = await axios.patch(`${serverUrl}/task/${task._id}`, task);
+      const res = await axios.patch(
+        `${serverUrl}/api/v1/task/${task._id}`,
+        task
+      );
 
       // update the task in the tasks array
       const newTasks = tasks.map((tsk) => {
@@ -108,7 +119,7 @@ export const TasksProvider = ({ children }) => {
   const deleteTask = async (taskId) => {
     setLoading(true);
     try {
-      await axios.delete(`${serverUrl}/task/${taskId}`);
+      await axios.delete(`${serverUrl}/api/v1/task/${taskId}`);
 
       // remove the task from the tasks array
       const newTasks = tasks.filter((tsk) => tsk._id !== taskId);
