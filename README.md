@@ -68,6 +68,7 @@ cd task-management-app
     npm install
 4- Start the backend server:
     npm run dev
+---
 
 ### Frontend Configuration
 1- Navigate to the client directory:
@@ -88,3 +89,30 @@ cd task-management-app
 - Log in using your Google account.
 
 - Start managing your tasks by creating, updating, or deleting tasks on the dashboard.
+
+---
+### Project Structure
+
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── context/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   └── helpers/
+│   └── ...
+├── backend/
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── middleware/
+│   └── ...
+├── README.md
+└── .env.example
+
+---
+
+Contributing
+Contributions are welcome! Feel free to submit a pull request or open an issue for any bugs or feature requests.
+
+@Author: Abdoulaye Gueye
