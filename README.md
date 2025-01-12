@@ -45,7 +45,7 @@ Make sure you have the following installed:
 ```bash
 git clone https://github.com/bayelaye313/task-management-app.git
 cd task-management-app
-
+```
 ---
 
 ### Backend Configuration
