@@ -8,7 +8,7 @@ import SidebarPovider from "./helpers/SidebarPovider";
 
 function App() {
   return (
-    <div className="h-full flex overflow-hidden">
+    <div className="h-dvh flex overflow-hidden">
       {/* Barre latérale minimisée */}
       <MiniSidebar />
 

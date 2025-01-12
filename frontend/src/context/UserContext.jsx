@@ -260,8 +260,6 @@ export const UserContextProvider = ({ children }) => {
 
       if (isLoggedIn) {
         await getUser();
-      } else {
-        navigate("/login");
       }
     };
 
