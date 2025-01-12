@@ -80,7 +80,7 @@ export const UserContextProvider = ({ children }) => {
         "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
       // Supprimer les informations utilisateur et rediriger
-      setUser(null);
+      setUser({});
       toast.success("User logged out successfully");
       navigate("/login");
     } catch (error) {
@@ -233,20 +233,39 @@ export const UserContextProvider = ({ children }) => {
 
   // Check login status
   const userLoginStatus = async () => {
+    let loggedIn = false;
     try {
-      const res = await axios.get(`${serverUrl}/api/v1/login-status`);
-      return !!res.data;
+      const res = await axios.get(`${serverUrl}/api/v1/login-status`, {
+        withCredentials: true, // send cookies to the server
+      });
+
+      // coerce the string to boolean
+      loggedIn = !!res.data;
+      setLoading(false);
+
+      if (!loggedIn) {
+        navigate("/login");
+      }
     } catch (error) {
-      handleError(error);
-      return false;
+      console.log("Error getting user login status", error);
     }
+
+    return loggedIn;
   };
 
   useEffect(() => {
-    (async () => {
+    const loginStatusGetUser = async () => {
       const isLoggedIn = await userLoginStatus();
-      if (isLoggedIn) await getUser();
-    })();
+      console.log("logstat", isLoggedIn);
+
+      if (isLoggedIn) {
+        await getUser();
+      } else {
+        navigate("/login");
+      }
+    };
+
+    loginStatusGetUser();
   }, []);
 
   useEffect(() => {

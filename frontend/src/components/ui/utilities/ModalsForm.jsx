@@ -58,7 +58,9 @@ function ModalForm() {
         ref={ref}
       >
         <div className="flex flex-col gap-1">
-          <label htmlFor="title">Title</label>
+          <label htmlFor="title">
+            Title <b className="text-red-600">*</b>
+          </label>
           <input
             className="bg-[#F9F9F9] p-2 rounded-md border"
             type="text"
@@ -70,7 +72,9 @@ function ModalForm() {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">
+            Description <b className="text-red-600">*</b>
+          </label>
           <textarea
             className="bg-[#F9F9F9] p-2 rounded-md border resize-none"
             name="description"

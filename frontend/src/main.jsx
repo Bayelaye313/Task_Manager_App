@@ -28,6 +28,10 @@ import { TasksProvider } from "./context/TaskContext";
 // Route privée
 const PrivateRoute = ({ children }) => {
   const { user } = useUserContext();
+  // Attendre que l'état utilisateur soit chargé
+  if (user === undefined) {
+    return <div>Loading...</div>;
+  }
   return user && user.email ? children : <Navigate to="/login" />;
 };
 
