@@ -52,7 +52,7 @@ function Header() {
 
         <div className="flex gap-4 items-center">
           <Link
-            to="https://github.com/Maclinz/taskfyer"
+            to="https://github.com/Bayelaye313/Task_Manager_App"
             target="_blank"
             rel="noopener noreferrer"
             className="h-[40px] w-[40px] text-purple-500 rounded-full flex items-center justify-center text-lg border-2 border-[#E6E6E6]"

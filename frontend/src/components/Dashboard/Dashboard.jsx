@@ -30,16 +30,16 @@ const Dashboard = () => {
     setPriority("all");
   }, [setPriority]);
 
-  const filteredTasks = filterTasks(tasks, priority); // Call the function with arguments
+  const filteredTasks = filterTasks(tasks, priority);
 
   return (
-    <main className="m-6 h-full">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold">Overdue Tasks</h1>
+    <main className="m-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-gray-800">Overdue Tasks</h1>
         <Filter />
       </div>
       <motion.div
-        className="pb-[2rem] mt-6 grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[1.5rem]"
+        className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6"
         variants={container}
         initial="hidden"
         animate="visible"
@@ -48,8 +48,7 @@ const Dashboard = () => {
           <TaskItemsCard key={i} task={task} />
         ))}
         <motion.button
-          className="h-[16rem] w-full py-2 rounded-md text-lg font-medium text-gray-500 border-dashed border-2 border-gray-400
-          hover:bg-gray-300 hover:border-none transition duration-200 ease-in-out"
+          className="h-[12rem] w-full py-4 rounded-lg text-lg font-medium text-gray-500 border-dashed border-2 border-gray-400 hover:bg-gray-200 hover:border-gray-500 transition duration-200"
           onClick={openModalForAdd}
           variants={item}
         >
@@ -59,5 +58,4 @@ const Dashboard = () => {
     </main>
   );
 };
-
 export default Dashboard;

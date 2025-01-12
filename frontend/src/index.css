@@ -24,7 +24,7 @@ body {
   transform: translateY(-50%);
 }
 .auth-page {
-  height: 100vh;
+  height: 100dvh;
   background: url("../glass-bg.png") no-repeat center center fixed;
   background-size: cover;
 }
@@ -113,5 +113,19 @@ form > img {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+@layer components {
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
