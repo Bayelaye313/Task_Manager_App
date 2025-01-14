@@ -8,7 +8,7 @@ function Sidebar() {
 
   return (
     <div
-      className="w-[20rem] fixed top-0 right-0 h-auto bg-transparent flex flex-col 
+      className="w-[18rem] fixed top-0 right-0 h-auto bg-transparent flex flex-col 
                  border-l border-gray-200 shadow-md p-4 overflow-y-auto"
       style={{ maxHeight: "100vh" }} // Limite la hauteur pour s'adapter à l'écran
     >
@@ -22,7 +22,7 @@ function Sidebar() {
 
       {/* Bouton de déconnexion */}
       <button
-        className="mt-auto py-3 px-6 bg-[#EB4E31] text-white rounded-lg 
+        className="mt-auto py-3 px-4 bg-[#EB4E31] text-white rounded-lg 
                    hover:bg-[#3aafae] transition-all duration-200"
         onClick={logoutUser}
       >

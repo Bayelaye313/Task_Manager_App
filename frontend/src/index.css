@@ -29,8 +29,8 @@ body.dark {
   transform: translateY(-50%);
 }
 .auth-page {
-  /* background: url("../glass-bg.png") no-repeat center center fixed;
-  background-size: cover; */
+  background: url("../glass-bg.png") no-repeat center center fixed;
+  background-size: cover; 
 }
 
 form {

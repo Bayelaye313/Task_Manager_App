@@ -42,7 +42,7 @@ const Dashboard = () => {
         className="grid grid-cols-1 
                       md:grid-cols-2 
                       lg:grid-cols-3 
-                      mt-10 gap-4"
+                      mt-10 gap-6"
         variants={container}
         initial="hidden"
         animate="visible"

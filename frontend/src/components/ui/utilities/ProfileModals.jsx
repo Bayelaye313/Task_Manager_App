@@ -33,10 +33,10 @@ function ProfileModal() {
   };
 
   return (
-    <div className="fixed left-0 top-0 z-50 h-full w-full bg-[#333]/30 overflow-hidden">
+    <div className="fixed py-6 bottom-2 left-0 top-[0] z-50 w-full  bg-[#333]/30 flex justify-end items-center rounded-lg">
       <div
         ref={ref}
-        className="py-5 px-6 max-w-[520px] w-full flex flex-col gap-3 bg-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-lg shadow-md border-2 border-white"
+        className="py-[1.5rem] px-6 max-w-[520px] w-full flex flex-col gap-3 bg-gray-200 shadow-md border-solid border-b-black rounded-lg text-black "
       >
         <div className="absolute left-0 top-0 w-full h-[80px] bg-[#323232]/10 rounded-tr-md rounded-tl-md"></div>
 
@@ -69,14 +69,11 @@ function ProfileModal() {
         </div>
         <div>
           <h1 className="text-lg font-bold">{name}</h1>
-          <p className="text-sm text-gray-500">
-            <Mail />
-          </p>
         </div>
 
         <form
           action=""
-          className="mt-4 pt-2 flex flex-col gap-4 border-t-2 border-t-[#323232]/10"
+          className="mt-2 pt-2  flex flex-col gap-4 border-t-2 border-t-[#323232]/10"
           onSubmit={(e) => {
             e.preventDefault();
             updateUser(e, {

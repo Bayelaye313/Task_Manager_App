@@ -53,7 +53,7 @@ function ModalForm() {
   return (
     <div className="fixed py-6 bottom-0 left-0 top-[0] z-50 w-full  bg-[#333]/30 flex justify-center items-center">
       <form
-        className="py-[1.5rem] px-6 max-w-[520px] w-full flex flex-col gap-3 bg-white rounded-lg shadow-md"
+        className="py-[1.5rem] px-6 max-w-[520px] w-full flex flex-col gap-3 bg-gray-600 text-black rounded-lg shadow-md border-solid border-b-black"
         onSubmit={handleSubmit}
         ref={ref}
       >
