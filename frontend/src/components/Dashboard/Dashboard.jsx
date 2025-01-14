@@ -39,7 +39,10 @@ const Dashboard = () => {
         <Filter />
       </div>
       <motion.div
-        className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6"
+        className="grid grid-cols-1 
+                      md:grid-cols-2 
+                      lg:grid-cols-3 
+                      mt-10 gap-4"
         variants={container}
         initial="hidden"
         animate="visible"
@@ -48,7 +51,7 @@ const Dashboard = () => {
           <TaskItemsCard key={i} task={task} />
         ))}
         <motion.button
-          className="h-[12rem] w-full py-4 rounded-lg text-lg font-medium text-gray-500 border-dashed border-2 border-gray-400 hover:bg-gray-200 hover:border-gray-500 transition duration-200"
+          className="h-[10rem] w-full py-4 rounded-lg text-lg font-medium text-gray-500 border-dashed border-2 border-gray-400 hover:bg-gray-200 hover:border-gray-500 transition duration-200"
           onClick={openModalForAdd}
           variants={item}
         >

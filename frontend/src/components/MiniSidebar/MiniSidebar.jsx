@@ -32,7 +32,7 @@ function MiniSidebar() {
   ];
 
   return (
-    <div className="basis-[5rem] flex flex-col bg-[#f9f9f9]">
+    <div className="basis-[5rem] flex flex-col bg-transparent ">
       <div className="flex items-center justify-center h-[5rem]">
         <img
           src="/saitama.jpg"

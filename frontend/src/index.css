@@ -6,9 +6,14 @@
   width: 0;
 }
 body {
+  transition: background-color 0.3s ease, color 0.3s ease;
   background-color: #f9f9f9;
   height: 100dvh;
   position: relative;
+}
+body.dark {
+  background-color: #121212;
+  color: #ffffff;
 }
 /* Utilities */
 .u-triangle::before {
@@ -24,8 +29,8 @@ body {
   transform: translateY(-50%);
 }
 .auth-page {
-  background: url("../glass-bg.png") no-repeat center center fixed;
-  background-size: cover;
+  /* background: url("../glass-bg.png") no-repeat center center fixed;
+  background-size: cover; */
 }
 
 form {

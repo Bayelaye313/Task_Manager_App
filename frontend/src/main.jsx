@@ -24,6 +24,7 @@ import PendingTask from "./layouts/PendingTask";
 import CompletedTask from "./layouts/CompletedTask";
 import OverdueTask from "./layouts/OverdueTask";
 import { TasksProvider } from "./context/TaskContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 // Route privée
 const PrivateRoute = ({ children }) => {
@@ -38,43 +39,45 @@ const PrivateRoute = ({ children }) => {
 // Gestion des routes
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Router>
-      <UserContextProvider>
-        <TasksProvider>
-          <Routes>
-            {/* Wrapper principal */}
-            <Route path="/" element={<App />}>
-              {/* Routes publiques */}
-              <Route path="/register" element={<ResgisterPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/pending" element={<PendingTask />} />
-              <Route path="/completed" element={<CompletedTask />} />
-              <Route path="/overdue" element={<OverdueTask />} />
+    <ThemeProvider>
+      <Router>
+        <UserContextProvider>
+          <TasksProvider>
+            <Routes>
+              {/* Wrapper principal */}
+              <Route path="/" element={<App />}>
+                {/* Routes publiques */}
+                <Route path="/register" element={<ResgisterPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/pending" element={<PendingTask />} />
+                <Route path="/completed" element={<CompletedTask />} />
+                <Route path="/overdue" element={<OverdueTask />} />
 
-              <Route
-                path="/verify-email/:verificationToken"
-                element={<PageEmailverif />}
-              />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route
-                path="/reset-password/:resetToken"
-                element={<ResetPassword />}
-              />
+                <Route
+                  path="/verify-email/:verificationToken"
+                  element={<PageEmailverif />}
+                />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route
+                  path="/reset-password/:resetToken"
+                  element={<ResetPassword />}
+                />
 
-              {/* Routes privées */}
-              <Route
-                path="/"
-                element={
-                  <PrivateRoute>
-                    <Dashboard />
-                  </PrivateRoute>
-                }
-              />
-            </Route>
-          </Routes>
-          <Toaster />
-        </TasksProvider>
-      </UserContextProvider>
-    </Router>
+                {/* Routes privées */}
+                <Route
+                  path="/"
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+              </Route>
+            </Routes>
+            <Toaster />
+          </TasksProvider>
+        </UserContextProvider>
+      </Router>
+    </ThemeProvider>
   </StrictMode>
 );

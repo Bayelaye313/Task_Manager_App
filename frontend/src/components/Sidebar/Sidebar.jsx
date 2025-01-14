@@ -8,7 +8,7 @@ function Sidebar() {
 
   return (
     <div
-      className="w-[20rem] fixed top-0 right-0 h-auto bg-[#f9f9f9] flex flex-col 
+      className="w-[20rem] fixed top-0 right-0 h-auto bg-transparent flex flex-col 
                  border-l border-gray-200 shadow-md p-4 overflow-y-auto"
       style={{ maxHeight: "100vh" }} // Limite la hauteur pour s'adapter à l'écran
     >

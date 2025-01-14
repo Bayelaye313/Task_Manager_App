@@ -31,6 +31,16 @@ export const TasksProvider = ({ children }) => {
   const [modalMode, setModalMode] = useState("");
   const [profileModal, setProfileModal] = useState(false);
 
+  //Modals functions
+
+  const closeModal = () => {
+    setIsEditing(false);
+    setProfileModal(false);
+    setModalMode("");
+    setActiveTask(null);
+    setTask({});
+  };
+
   const openModalForAdd = () => {
     setModalMode("add");
     setIsEditing(true);
@@ -47,12 +57,35 @@ export const TasksProvider = ({ children }) => {
     setProfileModal(true);
   };
 
-  const closeModal = () => {
-    setIsEditing(false);
-    setProfileModal(false);
-    setModalMode("");
-    setActiveTask(null);
-    setTask({});
+  //CRUD functions
+  const createTask = async (task) => {
+    setLoading(true);
+    try {
+      const res = await axios.post(`${serverUrl}/api/v1/task/create`, task);
+
+      console.log("Task created", res.data);
+
+      setTasks([...tasks, res.data]);
+      toast.success("Task created successfully");
+    } catch (error) {
+      console.log("Error creating task", error);
+    }
+    setLoading(false);
+  };
+
+  //delete task
+  const deleteTask = async (taskId) => {
+    setLoading(true);
+    try {
+      await axios.delete(`${serverUrl}/api/v1/task/${taskId}`);
+
+      // remove the task from the tasks array
+      const newTasks = tasks.filter((tsk) => tsk._id !== taskId);
+
+      setTasks(newTasks);
+    } catch (error) {
+      console.log("Error deleting task", error);
+    }
   };
 
   // get tasks
@@ -82,21 +115,6 @@ export const TasksProvider = ({ children }) => {
     setLoading(false);
   };
 
-  const createTask = async (task) => {
-    setLoading(true);
-    try {
-      const res = await axios.post(`${serverUrl}/api/v1/task/create`, task);
-
-      console.log("Task created", res.data);
-
-      setTasks([...tasks, res.data]);
-      toast.success("Task created successfully");
-    } catch (error) {
-      console.log("Error creating task", error);
-    }
-    setLoading(false);
-  };
-
   const updateTask = async (task) => {
     setLoading(true);
     try {
@@ -115,20 +133,6 @@ export const TasksProvider = ({ children }) => {
       setTasks(newTasks);
     } catch (error) {
       console.log("Error updating task", error);
-    }
-  };
-
-  const deleteTask = async (taskId) => {
-    setLoading(true);
-    try {
-      await axios.delete(`${serverUrl}/api/v1/task/${taskId}`);
-
-      // remove the task from the tasks array
-      const newTasks = tasks.filter((tsk) => tsk._id !== taskId);
-
-      setTasks(newTasks);
-    } catch (error) {
-      console.log("Error deleting task", error);
     }
   };
 
@@ -157,28 +161,27 @@ export const TasksProvider = ({ children }) => {
   return (
     <TasksContext.Provider
       value={{
-        tasks,
-        loading,
-        task,
-        tasks,
-        getTask,
+        activeTask,
+        activeTasks,
         createTask,
-        updateTask,
+        completedTasks,
+        closeModal,
         deleteTask,
-        priority,
-        setPriority,
+        getTask,
         handleInput,
         isEditing,
-        setIsEditing,
+        loading,
+        modalMode,
         openModalForAdd,
         openModalForEdit,
-        activeTask,
-        closeModal,
-        modalMode,
         openProfileModal,
-        activeTasks,
-        completedTasks,
         profileModal,
+        priority,
+        setPriority,
+        setIsEditing,
+        tasks,
+        task,
+        updateTask,
       }}
     >
       {children}

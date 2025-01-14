@@ -24,7 +24,7 @@ function TaskItemsCard({ task }) {
 
   return (
     <motion.div
-      className="h-[12rem] px-4 py-4 flex flex-col gap-4 shadow-lg bg-white rounded-lg border hover:shadow-md transition-shadow duration-200"
+      className="h-[10rem] px-4 py-4 flex flex-col gap-4 shadow-lg bg-white rounded-lg border hover:shadow-md transition-shadow duration-200"
       variants={item}
     >
       <div>

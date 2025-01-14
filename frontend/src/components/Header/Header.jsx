@@ -1,19 +1,24 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Github, Moon, User } from "lucide-react";
+import { Github, Moon, Sun, User } from "lucide-react";
 import { useUserContext } from "../../context/UserContext";
 import { useTasks } from "@/context/TaskContext";
+import { useTheme } from "@/context/ThemeContext";
 
 function Header() {
   const { user } = useUserContext();
-  const { openModalForAdd, activeTasks } = useTasks();
+  const { darkMode, toggleTheme } = useTheme();
+  const { openModalForAdd, activeTasks = [] } = useTasks();
   const navigate = useNavigate();
 
-  const userId = user ? user._id : null;
-  const name = user ? user.name : "Guest";
+  const { _id: userId, name = "Guest" } = user || {};
 
   return (
-    <header className="px-6 my-4 w-full flex items-center justify-between bg-[#f9f9f9]">
+    <header
+      className={`px-6 my-4 flex items-center justify-between bg-transparent transition-all duration-300 ${
+        userId ? "w-[calc(100%-20rem)] ml-0" : "w-full"
+      }`}
+    >
       <div>
         <h1 className="text-lg font-medium">
           <span role="img" aria-label="wave">
@@ -25,52 +30,59 @@ function Header() {
           {userId ? (
             <>
               You have{" "}
-              <span className="font-bold text-[#3aafae]">
+              <span className="font-bold text-teal-600">
                 {activeTasks.length}
-              </span>
-              &nbsp;active tasks
+              </span>{" "}
+              active tasks.
             </>
           ) : (
-            "Please login or register to view your tasks"
+            "Please login or register to view your tasks."
           )}
         </p>
       </div>
-      <div className="h-[50px] flex items-center gap-[10.4rem]">
+      <div className="h-[50px] flex items-center gap-8">
         <button
-          className="px-8 py-3 bg-[#3aafae] text-white rounded-[50px]
-          hover:bg-[#00A1F1] hover:text-white transition-all duration-200 ease-in-out"
-          onClick={() => {
-            if (userId) {
-              openModalForAdd();
-            } else {
-              navigate("/login");
-            }
-          }}
+          className="px-8 py-3 bg-teal-600 text-white rounded-full hover:bg-teal-700 transition"
+          onClick={() => (userId ? openModalForAdd() : navigate("/login"))}
         >
           {userId ? "Add a new Task" : "Login / Register"}
         </button>
-
         <div className="flex gap-4 items-center">
-          <Link
-            to="https://github.com/Bayelaye313/Task_Manager_App"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="h-[40px] w-[40px] text-purple-500 rounded-full flex items-center justify-center text-lg border-2 border-[#E6E6E6]"
-          >
-            <Github className="text-purple-500" />
-          </Link>
-          <Link
-            to="#"
-            className="h-[40px] w-[40px] text-purple-500 rounded-full flex items-center justify-center text-lg border-2 border-[#E6E6E6]"
-          >
-            <Moon className="text-purple-500" />
-          </Link>
-          <Link
-            to="#"
-            className="h-[40px] w-[40px] text-purple-500 rounded-full flex items-center justify-center text-lg border-2 border-[#E6E6E6]"
-          >
-            <User className="text-purple-500" />
-          </Link>
+          {userId ? (
+            // Afficher uniquement le bouton Toggle si l'utilisateur est connecté
+            <button
+              aria-label="Toggle Dark Mode"
+              onClick={toggleTheme}
+              className="h-10 w-10 flex items-center justify-center text-purple-500 border-2 border-gray-300 rounded-full"
+            >
+              {darkMode ? <Sun /> : <Moon />}
+            </button>
+          ) : (
+            // Afficher toutes les icônes si l'utilisateur n'est pas connecté
+            <>
+              <a
+                href="https://github.com/Bayelaye313/Task_Manager_App"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="h-10 w-10 flex items-center justify-center text-purple-500 border-2 border-gray-300 rounded-full"
+              >
+                <Github />
+              </a>
+              <button
+                aria-label="Toggle Dark Mode"
+                onClick={toggleTheme}
+                className="h-10 w-10 flex items-center justify-center text-purple-500 border-2 border-gray-300 rounded-full"
+              >
+                {darkMode ? <Sun /> : <Moon />}
+              </button>
+              <button
+                aria-label="User Settings"
+                className="h-10 w-10 flex items-center justify-center text-purple-500 border-2 border-gray-300 rounded-full"
+              >
+                <User />
+              </button>
+            </>
+          )}
         </div>
       </div>
     </header>

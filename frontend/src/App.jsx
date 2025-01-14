@@ -5,10 +5,12 @@ import Header from "./components/Header/Header";
 import MainLayout from "./layouts/MainLayout";
 import MainContentLayout from "./layouts/MainContentLayout";
 import SidebarPovider from "./helpers/SidebarPovider";
+import { useTheme } from "./context/ThemeContext";
 
 function App() {
+  const { darkMode } = useTheme();
   return (
-    <div className="h-dvh flex overflow-hidden">
+    <div className={`h-dvh flex overflow-hidden ${darkMode ? "dark" : ""}`}>
       {/* Barre latérale minimisée */}
       <MiniSidebar />
 

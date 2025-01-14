@@ -9,7 +9,7 @@ const MainContentLayout = ({ children }) => {
     <main
       className={`${
         userId ? "pr-[20rem]" : ""
-      } pb-[1.5rem] flex h-full bg-gray-100`}
+      } pb-[1.5rem] flex h-full bg-transparent`}
     >
       {children}
     </main>
