@@ -1,12 +1,17 @@
-import React from "react";
-// import { motion } from "framer-motion";
+import React, { useState } from "react";
 import { useTasks } from "@/context/TaskContext";
 import { Star, Edit, Trash } from "lucide-react";
 import FormateDate from "@/helpers/FormateDate";
-import { item } from "@/components/Dashboard/Dashboard";
 import { motion } from "motion/react";
 
 function TaskItemsCard({ task }) {
+  const { updateTask, getTask, openModalForEdit, deleteTask } = useTasks();
+
+  const toggleCompletStatus = async () => {
+    const updatedTask = { ...task, completed: !task.completed };
+    await updateTask(updatedTask);
+  };
+
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "low":
@@ -20,13 +25,8 @@ function TaskItemsCard({ task }) {
     }
   };
 
-  const { getTask, openModalForEdit, deleteTask } = useTasks();
-
   return (
-    <motion.div
-      className="h-[10rem] px-4 py-4 flex flex-col gap-4 shadow-lg bg-white rounded-lg border hover:shadow-md transition-shadow duration-200"
-      variants={item}
-    >
+    <motion.div className="h-[10rem] px-6 py-4 flex flex-col gap-4 shadow-lg bg-white rounded-lg border hover:shadow-md transition-shadow duration-200">
       <div>
         <h4 className="font-bold text-lg text-gray-800 truncate">
           {task.title}
@@ -47,6 +47,7 @@ function TaskItemsCard({ task }) {
             className={`p-1 rounded-full ${
               task.completed ? "text-yellow-400" : "text-gray-400"
             } hover:bg-gray-100`}
+            onClick={toggleCompletStatus}
           >
             <Star size={20} />
           </button>
@@ -61,9 +62,7 @@ function TaskItemsCard({ task }) {
           </button>
           <button
             className="p-1 rounded-full text-red-500 hover:bg-gray-100"
-            onClick={() => {
-              deleteTask(task._id);
-            }}
+            onClick={() => deleteTask(task._id)}
           >
             <Trash size={20} />
           </button>
@@ -72,4 +71,5 @@ function TaskItemsCard({ task }) {
     </motion.div>
   );
 }
+
 export default TaskItemsCard;

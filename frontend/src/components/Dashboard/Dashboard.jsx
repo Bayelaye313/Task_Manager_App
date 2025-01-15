@@ -35,7 +35,7 @@ const Dashboard = () => {
   return (
     <main className="m-6 space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-800">Overdue Tasks</h1>
+        <h1 className="text-3xl font-bold text-gray-800">All Tasks</h1>
         <Filter />
       </div>
       <motion.div

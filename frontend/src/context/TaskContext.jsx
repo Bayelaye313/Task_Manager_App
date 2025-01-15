@@ -62,29 +62,44 @@ export const TasksProvider = ({ children }) => {
     setLoading(true);
     try {
       const res = await axios.post(`${serverUrl}/api/v1/task/create`, task);
-
-      console.log("Task created", res.data);
-
       setTasks([...tasks, res.data]);
-      toast.success("Task created successfully");
+      toast.success("Task created successfully", {
+        icon: "🎉",
+        style: { borderRadius: "8px", background: "#333", color: "#fff" },
+      });
     } catch (error) {
-      console.log("Error creating task", error);
+      toast.error(
+        "Failed to create task: " + error.response?.data?.message ||
+          error.message
+      );
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
-
   //delete task
   const deleteTask = async (taskId) => {
-    setLoading(true);
-    try {
-      await axios.delete(`${serverUrl}/api/v1/task/${taskId}`);
+    if (
+      window.confirm(
+        "Are you sure you want to delete this task? This action cannot be undone."
+      )
+    ) {
+      setLoading(true);
+      try {
+        await axios.delete(`${serverUrl}/api/v1/task/${taskId}`);
+        toast.success("task deleted successfully");
 
-      // remove the task from the tasks array
-      const newTasks = tasks.filter((tsk) => tsk._id !== taskId);
+        // remove the task from the tasks array
+        const newTasks = tasks.filter((tsk) => tsk._id !== taskId);
 
-      setTasks(newTasks);
-    } catch (error) {
-      console.log("Error deleting task", error);
+        setTasks(newTasks);
+      } catch (error) {
+        toast.error(
+          "Failed to delete all tasks: " + error.response?.data?.message ||
+            error.message
+        );
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
