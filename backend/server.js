@@ -20,7 +20,7 @@ App.use(morgan("dev"));
 // Middleware pour gérer CORS
 App.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
