@@ -35,7 +35,7 @@ App.use(handleError);
 // Fonction principale pour démarrer le serveur
 const server = async () => {
   try {
-    await connectDb(); // Assurez-vous que connectDb est correctement implémentée
+    await connectDb();
 
     App.listen(port, () =>
       console.log(`✅ Server started on port ${port}`.green.bold)
