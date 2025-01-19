@@ -5,7 +5,7 @@ import { useUserContext } from "./UserContext";
 
 const TasksContext = createContext();
 
-const serverUrl = "https://task-manager-app-ba2d.onrender.com/api/v1";
+const serverUrl = "https://task-manager-app-ba2d.onrender.com";
 
 export const TasksProvider = ({ children }) => {
   const { user } = useUserContext();
