@@ -10,7 +10,7 @@ const UserContext = React.createContext();
 axios.defaults.withCredentials = true;
 
 export const UserContextProvider = ({ children }) => {
-  const serverUrl = "https://task-manager-app-ba2d.onrender.com/api/v1";
+  const serverUrl = "https://task-manager-app-ba2d.onrender.com";
   const navigate = useNavigate();
 
   const [user, setUser] = useState({});
