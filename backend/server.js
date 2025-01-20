@@ -24,7 +24,7 @@ const isProduction = process.env.NODE_ENV === "production";
 App.use(
   cors({
     origin: isProduction
-      ? "https://task-manager-app-ruddy-mu.vercel.app"
+      ? "https://task-manager-app-ruddy-mu.vercel.app/"
       : "http://localhost:3000",
     credentials: true,
   })
