@@ -16,13 +16,19 @@ App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 App.use(cookieParser());
 App.use(morgan("dev"));
-
+App.options("*", cors());
 // Middleware pour gérer CORS
 App.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    origin: process.env.CLIENT_URL || "*", // Allow only your client URL
+    credentials: true, // Allow cookies and credentials
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Include PATCH
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With",
+      "Accept",
+    ], // Add any required headers
   })
 );
 
