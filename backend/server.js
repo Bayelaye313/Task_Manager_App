@@ -24,7 +24,7 @@ const isProduction = process.env.NODE_ENV === "production";
 App.use(
   cors({
     origin: isProduction
-      ? "https://task-manager-app-ruddy-mu.vercel.app/"
+      ? "https://task-manager-app-ruddy-mu.vercel.app"
       : "http://localhost:3000",
     credentials: true,
   })
@@ -46,8 +46,8 @@ App.use(
 // preflight requests are handled
 App.options("*", cors());
 // Routes
-App.use("/api/v1", require("./src/routes/userRoutes"));
-App.use("/api/v1", require("./src/routes/taskRoutes"));
+App.use("/", require("./src/routes/userRoutes"));
+App.use("/", require("./src/routes/taskRoutes"));
 
 // Gestionnaire d'erreurs
 App.use(handleError);
