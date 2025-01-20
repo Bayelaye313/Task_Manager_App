@@ -26,8 +26,8 @@ App.use(
 );
 
 // Routes
-App.use("/api/V1", require("./src/routes/userRoutes"));
-App.use("/api/V1", require("./src/routes/taskRoutes"));
+App.use("/api/v1", require("./src/routes/userRoutes"));
+App.use("/api/v1", require("./src/routes/taskRoutes"));
 
 // Gestionnaire d'erreurs
 App.use(handleError);
