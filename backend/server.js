@@ -19,7 +19,7 @@ App.use(morgan("dev"));
 // Middleware pour gérer CORS
 App.use(
   cors({
-    origin: "https://task-manager-app-ruddy-mu.vercel.app",
+    origin: "https://task-manager-app-ruddy-mu.vercel.app" || "*",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
