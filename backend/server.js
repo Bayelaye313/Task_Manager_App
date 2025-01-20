@@ -16,19 +16,32 @@ App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 App.use(cookieParser());
 App.use(morgan("dev"));
+
+// Détection de l'environnement
+const isProduction = process.env.NODE_ENV === "production";
+
+// Configuration CORS
 App.use(
   cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true, // Allow cookies and credentials
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "X-Requested-With",
-      "Accept",
-    ],
+    origin: isProduction
+      ? "https://task-manager-app-ruddy-mu.vercel.app" // URL exacte du client
+      : "http://localhost:3000", // URL pour le développement local
+    credentials: true, // Permet l'envoi de cookies
   })
 );
+// App.use(
+//   cors({
+//     origin: process.env.CLIENT_URL,
+//     credentials: true, // Allow cookies and credentials
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//     allowedHeaders: [
+//       "Content-Type",
+//       "Authorization",
+//       "X-Requested-With",
+//       "Accept",
+//     ],
+//   })
+// );
 
 // preflight requests are handled
 App.options("*", cors());
