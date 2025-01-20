@@ -16,18 +16,18 @@ App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 App.use(cookieParser());
 App.use(morgan("dev"));
+
 // Middleware pour gérer CORS
 App.use(
   cors({
-    origin: "https://task-manager-app-ruddy-mu.vercel.app" || "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    origin: process.env.CLIENT_URL || "*",
     credentials: true,
   })
 );
 
 // Routes
-App.use("/api/v1", require("./src/routes/userRoutes"));
-App.use("/api/v1", require("./src/routes/taskRoutes"));
+App.use("/api/V1", require("./src/routes/userRoutes"));
+App.use("/api/V1", require("./src/routes/taskRoutes"));
 
 // Gestionnaire d'erreurs
 App.use(handleError);
