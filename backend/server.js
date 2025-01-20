@@ -16,11 +16,12 @@ App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 App.use(cookieParser());
 App.use(morgan("dev"));
-
+console.log("clien", process.env.CLIENT_URL);
 // Middleware pour gérer CORS
 App.use(
   cors({
     origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
