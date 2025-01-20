@@ -22,6 +22,7 @@ const getUser = asyncHandler(async (req, res) => {
 
 //register User
 const registerUser = asyncHandler(async (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
   const { name, email, password, photo, bio, role, isVerified } = req.body;
   // Vérification des champs requis
   if (!name || !email || !password) {
@@ -61,8 +62,8 @@ const registerUser = asyncHandler(async (req, res) => {
     // Ajout du cookie sécurisé
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
       maxAge: 30 * 24 * 60 * 60 * 1000,
       path: "/",
     });
@@ -113,6 +114,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
   // generate token with user id
   const token = generateTokens(userExists._id);
+  const isProduction = process.env.NODE_ENV === "production";
 
   if (userExists && isMatch) {
     const { _id, name, email, role, photo, bio, isVerified } = userExists;
@@ -122,8 +124,8 @@ const loginUser = asyncHandler(async (req, res) => {
       path: "/",
       httpOnly: true,
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      sameSite: "none", // cross-site access --> allow all third-party cookies
-      secure: true,
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
     });
 
     // send back the user and token in the response to the client
