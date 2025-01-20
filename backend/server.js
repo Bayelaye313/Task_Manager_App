@@ -22,16 +22,18 @@ App.use(
   cors({
     origin: process.env.CLIENT_URL || "*", // Allow only your client URL
     credentials: true, // Allow cookies and credentials
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // Include PATCH
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-      "X-Requested-With",
-      "Accept",
-    ], // Add any required headers
   })
 );
-
+App.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin,X-Requested-With,Content-Type,Accept,content-type,application/json"
+  );
+  next();
+});
 // Routes
 App.use("/api/V1", require("./src/routes/userRoutes"));
 App.use("/api/V1", require("./src/routes/taskRoutes"));
