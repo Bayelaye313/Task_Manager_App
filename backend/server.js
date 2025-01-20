@@ -24,9 +24,9 @@ const isProduction = process.env.NODE_ENV === "production";
 App.use(
   cors({
     origin: isProduction
-      ? "https://task-manager-app-ruddy-mu.vercel.app" // URL exacte du client
-      : "http://localhost:3000", // URL pour le développement local
-    credentials: true, // Permet l'envoi de cookies
+      ? "https://task-manager-app-ruddy-mu.vercel.app"
+      : "http://localhost:3000",
+    credentials: true,
   })
 );
 // App.use(
