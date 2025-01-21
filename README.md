@@ -56,7 +56,7 @@ cd task-management-app
 
 - PORT=5000
 - MONGO_URI=your-mongo-uri
-- CLIENT_URL=https://task-manager-app-ruddy-mu.vercel.app
+- CLIENT_URL=https://task-manager-app-red-three.vercel.app
 - JWT_SECRET=your-jwt-secret
 - NODE_ENV=DEVELOPMENT
 - USER_EMAIL=your-email@gmail.com
