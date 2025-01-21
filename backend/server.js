@@ -52,6 +52,13 @@ App.get("/", (req, res) => {
     message: "Welcome to the Node.js, Express and Socket.io API",
   });
 });
+
+App.get("/api/v1", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Api v1",
+  });
+});
 App.use("/api/v1", require("./src/routes/userRoutes"));
 App.use("/api/v1", require("./src/routes/taskRoutes"));
 
