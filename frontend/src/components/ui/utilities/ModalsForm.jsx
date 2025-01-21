@@ -1,4 +1,3 @@
-"use client";
 import { useTasks } from "@/context/TaskContext";
 import useTrackOutside from "@/helpers/useTrackOutside";
 import React, { useEffect, useRef } from "react";
