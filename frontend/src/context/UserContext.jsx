@@ -40,7 +40,7 @@ export const UserContextProvider = ({ children }) => {
       return;
     }
     try {
-      await axios.post(`${serverUrl}/register`, userState);
+      await axios.post(`${serverUrl}/api/v1/register`, userState);
       toast.success("User registered successfully");
       setUserState({ name: "", email: "", password: "" });
       navigate("/login");
@@ -54,7 +54,7 @@ export const UserContextProvider = ({ children }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${serverUrl}/login`, {
+      await axios.post(`${serverUrl}/api/v1/login`, {
         email: userState.email,
         password: userState.password,
       });
@@ -71,7 +71,7 @@ export const UserContextProvider = ({ children }) => {
 
   const logoutUser = async () => {
     try {
-      await axios.post(`${serverUrl}/logout`);
+      await axios.post(`${serverUrl}/api/v1/logout`);
 
       // Supprimer le token du stockage local
       localStorage.removeItem("token");
@@ -92,7 +92,7 @@ export const UserContextProvider = ({ children }) => {
   const getUser = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${serverUrl}/user`);
+      const res = await axios.get(`${serverUrl}/api/v1/user`);
       setUser(res.data);
     } catch (error) {
       handleError(error);
@@ -106,7 +106,7 @@ export const UserContextProvider = ({ children }) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.patch(`${serverUrl}/user`, data);
+      const res = await axios.patch(`${serverUrl}/api/v1/user`, data);
       setUser((prevState) => ({ ...prevState, ...res.data }));
       toast.success("User updated successfully");
     } catch (error) {
@@ -120,7 +120,7 @@ export const UserContextProvider = ({ children }) => {
   const emailVerification = async () => {
     setLoading(true);
     try {
-      await axios.post(`${serverUrl}/verify-email`);
+      await axios.post(`${serverUrl}/api/v1/verify-email`);
       toast.success("Email verification sent successfully");
     } catch (error) {
       handleError(error);
@@ -133,7 +133,7 @@ export const UserContextProvider = ({ children }) => {
   const verifyUser = async (token) => {
     setLoading(true);
     try {
-      await axios.post(`${serverUrl}/verify-user/${token}`);
+      await axios.post(`${serverUrl}/api/v1/verify-user/${token}`);
       toast.success("User verified successfully");
       await getUser();
       navigate("/");
@@ -148,7 +148,7 @@ export const UserContextProvider = ({ children }) => {
   const resetPassword = async (token, password) => {
     setLoading(true);
     try {
-      await axios.post(`${serverUrl}/reset-password/${token}`, {
+      await axios.post(`${serverUrl}/api/v1/reset-password/${token}`, {
         password,
       });
       toast.success("Password reset successfully");
@@ -164,7 +164,7 @@ export const UserContextProvider = ({ children }) => {
   const getAllUsers = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${serverUrl}/admin/users`);
+      const res = await axios.get(`${serverUrl}/api/v1/admin/users`);
       setAllUsers(res.data.users);
     } catch (error) {
       handleError(error);
@@ -176,7 +176,7 @@ export const UserContextProvider = ({ children }) => {
   const deleteUser = async (id) => {
     setLoading(true);
     try {
-      await axios.delete(`${serverUrl}/admin/users/${id}`);
+      await axios.delete(`${serverUrl}/api/v1/admin/users/${id}`);
       toast.success("User deleted successfully");
       await getAllUsers();
     } catch (error) {
@@ -191,7 +191,7 @@ export const UserContextProvider = ({ children }) => {
 
     try {
       const res = await axios.post(
-        `${serverUrl}/forgot-password`,
+        `${serverUrl}/api/v1/forgot-password`,
         {
           email,
         },
@@ -215,7 +215,7 @@ export const UserContextProvider = ({ children }) => {
 
     try {
       const res = await axios.patch(
-        `${serverUrl}/change-password`,
+        `${serverUrl}/api/v1/change-password`,
         { currentPassword, newPassword },
         {
           withCredentials: true, // send cookies to the server
@@ -235,7 +235,7 @@ export const UserContextProvider = ({ children }) => {
   const userLoginStatus = async () => {
     let loggedIn = false;
     try {
-      const res = await axios.get(`${serverUrl}/login-status`, {
+      const res = await axios.get(`${serverUrl}/api/v1/login-status`, {
         withCredentials: true, // send cookies to the server
       });
 
