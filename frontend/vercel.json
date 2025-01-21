@@ -2,7 +2,7 @@
     "rewrites": [
       {
         "source": "/api/v1/:path*",
-        "destination": "https://task-manager-app-ba2d.onrender.com/api/v1:path*"
+        "destination": "https://task-manager-app-ba2d.onrender.com/api/v1/:path*"
       },
       {
         "source": "/register",
@@ -15,6 +15,27 @@
       {
         "source": "/login",
         "destination": "/index.html"
-      }    ]
+      },
+      {
+        "source": "/admin/:path*",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/user",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/forgot-password",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/reset-password/:resetPasswordToken",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/change-password",
+        "destination": "/index.html"
+      }
+    ]
   }
   
