@@ -46,6 +46,12 @@ App.use(
 // preflight requests are handled
 App.options("*", cors());
 // Routes
+App.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Welcome to the Node.js, Express and Socket.io API",
+  });
+});
 App.use("/api/v1", require("./src/routes/userRoutes"));
 App.use("/api/v1", require("./src/routes/taskRoutes"));
 
