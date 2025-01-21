@@ -27,6 +27,10 @@ App.use(
     credentials: true,
   })
 );
+App.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
 // App.use(
 //   cors({
 //     origin: process.env.CLIENT_URL,
